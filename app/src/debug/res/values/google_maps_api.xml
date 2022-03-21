@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=E3:A2:AF:B1:98:42:80:43:D8:28:F6:E9:59:17:68:4E:C6:AF:1D:DF%3Bcom.training.personalinterestsmanager.nearestlbookstorefinder
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.training.personalinterestsmanager.nearestlbookstorefinder
+
+    SHA-1 certificate fingerprint:
+    E3:A2:AF:B1:98:42:80:43:D8:28:F6:E9:59:17:68:4E:C6:AF:1D:DF
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAQ0EfQEVuNuRn44SP6s6QTj-bU8WEDHuo</string>
+</resources>

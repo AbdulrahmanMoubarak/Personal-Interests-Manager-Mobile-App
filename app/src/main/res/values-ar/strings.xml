@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hobbitor</string>
+    <string name="booki">Hobbitor</string>
+    <string name="welcome_back">مرحبا بعودتك</string>
+    <string name="read_it_together">Read it together</string>
+    <string name="skip">تخطي</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="email">البريد</string>
+    <string name="password">كلمة المرور</string>
+    <string name="sign_up">انشاء حساب</string>
+    <string name="forget_password">نسيت كلمة المرور؟</string>
+    <string name="title_activity_nearest_bookstore">NearestBookstoreActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="movies">الأفلام</string>
+    <string name="books">الكتب</string>
+    <string name="music">الموسيقى</string>
+    <string name="library">المكتبة</string>
+</resources>
