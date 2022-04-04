@@ -34,4 +34,9 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="powered_by">Powered By</string>
     <string name="Cast">Cast</string>
+    <string name="search">"Search here "</string>
+    <string name="search_results">"Search Results For "</string>
+    <string name="add_rating">Add Rating</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
 </resources>

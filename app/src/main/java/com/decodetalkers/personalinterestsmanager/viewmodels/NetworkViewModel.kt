@@ -7,12 +7,19 @@ import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.models.SongModel
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
 import kotlinx.coroutines.flow.flow
+import java.lang.Exception
 
 class NetworkViewModel: ViewModel() {
 
     fun getMoviesSearchResults(name: String) = flow {
         val response = RetrofitBuilder.pimApiService.getMoviesSearchResults(name)
-            .body() as List<SectionModel>
+            .body() as List<MediaItemOfListModel>
+        emit(response)
+    }
+
+    fun getMusicSearchResults(query: String) = flow {
+        val response = RetrofitBuilder.pimApiService.searchForSong(query)
+            .body() as List<MediaItemOfListModel>
         emit(response)
     }
 
@@ -42,5 +49,18 @@ class NetworkViewModel: ViewModel() {
         val response = RetrofitBuilder.pimApiService.getMovieCastById(movieId)
             .body() as List<MediaItemOfListModel>
         emit(response)
+    }
+
+    fun addMovieRating(userId: Int, movieId: Int, rating: Float) = flow{
+        try {
+            val params = HashMap<String, String>()
+            params["userId"] = userId.toString()
+            params["movieId"] = movieId.toString()
+            params["rating"] = rating.toString()
+            val response = RetrofitBuilder.pimApiService.addMovieRating(params)
+            emit(true)
+        } catch (e: Exception){
+            emit(false)
+        }
     }
 }

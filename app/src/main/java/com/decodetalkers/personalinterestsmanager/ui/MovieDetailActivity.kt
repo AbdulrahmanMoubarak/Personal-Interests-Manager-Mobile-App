@@ -2,6 +2,7 @@ package com.decodetalkers.personalinterestsmanager.ui
 
 import android.app.Activity
 import android.app.ActivityOptions
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class MovieDetailActivity : YouTubeBaseActivity() {
     private lateinit var mMovie: MovieModel
@@ -70,6 +72,10 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         movie_detail_vote_count.text = mMovie.vote_count.toString()
         initYoutubePlayer(mMovie.trailer)
         loadMovieCast(mMovie.movie_id)
+
+        movieDetail_ButtonRating.setOnClickListener {
+
+        }
     }
 
     private fun initYoutubePlayer(trailerId: String) {
@@ -124,10 +130,28 @@ class MovieDetailActivity : YouTubeBaseActivity() {
     }
 
 
-    fun getCastByMovieId(movieId: Int) = flow {
+    private fun getCastByMovieId(movieId: Int) = flow {
         val response = RetrofitBuilder.pimApiService.getMovieCastById(movieId)
             .body() as List<MediaItemOfListModel>
         emit(response)
     }
+
+    private fun addMovieRating(userId: Int, movieId: Int, rating: Float) = flow{
+        try {
+            val params = HashMap<String, String>()
+            params["userId"] = userId.toString()
+            params["movieId"] = movieId.toString()
+            params["rating"] = rating.toString()
+            val response = RetrofitBuilder.pimApiService.addMovieRating(params)
+            emit(true)
+        } catch (e: Exception){
+            emit(false)
+        }
+    }
+
+    private fun showRatingDialogue(){
+        //AlertDialog.Builder(this).
+    }
+
 
 }

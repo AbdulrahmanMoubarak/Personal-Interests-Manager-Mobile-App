@@ -24,7 +24,6 @@ class LibraryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         titleCardLibrary.setHeaderType(MediaHeader.HEADER_LIBRARY)
     }
 }

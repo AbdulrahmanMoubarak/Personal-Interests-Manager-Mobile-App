@@ -20,6 +20,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
+            android:visibility="gone"
             android:translationZ="90dp"
             android:id="@+id/music_progress"
             android:layout_width="40dp"
@@ -33,7 +34,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/music_section_recycler"
             android:layout_width="match_parent"
-            android:layout_height="650dp"
+            android:layout_height="0dp"
             android:scrollbarSize="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
