@@ -30,7 +30,7 @@ class NetworkViewModel: ViewModel() {
     }
 
     fun getMovieById(movieId: String) = flow {
-        val response = RetrofitBuilder.pimApiService.getMovieById(movieId).body() as MovieModel
+        val response = RetrofitBuilder.pimApiService.getMovieById(movieId, "2018170873").body() as MovieModel
         emit(response)
     }
 
@@ -53,11 +53,7 @@ class NetworkViewModel: ViewModel() {
 
     fun addMovieRating(userId: Int, movieId: Int, rating: Float) = flow{
         try {
-            val params = HashMap<String, String>()
-            params["userId"] = userId.toString()
-            params["movieId"] = movieId.toString()
-            params["rating"] = rating.toString()
-            val response = RetrofitBuilder.pimApiService.addMovieRating(params)
+            val response = RetrofitBuilder.pimApiService.addMovieRating(userId,movieId, rating)
             emit(true)
         } catch (e: Exception){
             emit(false)

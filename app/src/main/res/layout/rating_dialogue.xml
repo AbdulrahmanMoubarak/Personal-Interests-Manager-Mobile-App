@@ -12,7 +12,7 @@
         android:layout_margin="8dp"
         android:text="@string/add_rating"
         android:textColor="#000"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,12 +23,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:numStars="10"
+        android:numStars="5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:progressTint="#ff0"
+        android:rating="1"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
+        android:textColor="@color/white"
         android:id="@+id/rating_btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,6 +45,7 @@
         />
 
     <Button
+        android:textColor="@color/white"
         android:id="@+id/rating_btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -21,6 +21,7 @@ class MovieModel(
     var imdb_id: String,
     var year: Int,
     var trailer: String,
-    var background: String
+    var background: String,
+    var user_rating: Float
 ) : Serializable {
 }

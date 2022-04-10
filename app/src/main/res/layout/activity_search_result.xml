@@ -58,6 +58,7 @@
     </GridView>
 
     <TextView
+        android:textAlignment="viewStart"
         android:id="@+id/txt_query"
         android:layout_width="0dp"
         android:layout_marginVertical="8dp"

@@ -6,10 +6,7 @@ import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.models.SongModel
 import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.FieldMap
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface RetrofitPimApi {
 
@@ -20,7 +17,8 @@ interface RetrofitPimApi {
 
     @GET("/movies/search")
     suspend fun getMovieById(
-        @Query("id") id :String
+        @Query("id") id :String,
+        @Query("userId") userId :String
     ) : Response<MovieModel>
 
     @GET("/movies/main")
@@ -33,10 +31,18 @@ interface RetrofitPimApi {
         @Query("movieId") movieId: Int
     ): Response<List<MediaItemOfListModel>>
 
+    @FormUrlEncoded
     @POST("/movies/rate")
     suspend fun addMovieRating(
-        @FieldMap params: HashMap<String, String>
+        @Field("userId") userId: Int,
+        @Field("movieId") movieId: Int,
+        @Field("rating") rating: Float,
     ): Response<ResponseBody>
+
+    @GET("/movies/movie-based-recommendation")
+    suspend fun getMovieBasedRecommendation(
+        @Query("movieId") movieId: Int
+    ): Response<List<SectionModel>>
 
     @GET("/music/main")
     suspend fun getMusicHomeResults(
@@ -52,6 +58,19 @@ interface RetrofitPimApi {
     suspend fun searchForSong(
         @Query("query") query: String
     ): Response<List<MediaItemOfListModel>>
+
+    @GET("/music/song-based-recommendation")
+    suspend fun getSongBasedRecommendation(
+        @Query("songId") songId: String
+    ): Response<List<SectionModel>>
+
+    @FormUrlEncoded
+    @POST("/song/listening")
+    suspend fun updateSongListeningTimes(
+        @Field("userId") userId: Int,
+        @Field("songId") songId: String
+    ): Response<ResponseBody>
+
 
 
 }

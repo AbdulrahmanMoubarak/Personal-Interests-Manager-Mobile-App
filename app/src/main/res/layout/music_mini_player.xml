@@ -24,7 +24,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="8dp"
-                android:src="@drawable/ic_play_svgrepo_com"
+                android:src="@drawable/ic_pause_svgrepo_com"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -32,22 +32,43 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/mini_player_addPlaylist"
+                android:layout_marginHorizontal="32dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_add_list_svgrepo_com"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/mini_player_play_pause"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/mini_player_replay"
+                android:layout_marginHorizontal="32dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_replay_svgrepo_com"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/mini_player_play_pause"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/mini_player_forward"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_forward_svgrepo_com"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/mini_player_addPlaylist"
+                app:layout_constraintStart_toEndOf="@id/mini_player_play_pause"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/mini_player_backward"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_forward_svgrepo_com"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/mini_player_play_pause"
+                app:layout_constraintStart_toEndOf="@id/mini_player_replay"
+                android:rotation="180"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

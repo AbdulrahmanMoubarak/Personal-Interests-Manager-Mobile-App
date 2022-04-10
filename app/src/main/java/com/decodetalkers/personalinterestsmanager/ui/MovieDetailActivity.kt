@@ -6,6 +6,8 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
@@ -19,11 +21,14 @@ import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 
 import com.decodetalkers.personalinterestsmanager.models.MovieModel
+import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.MOVIE_IMAGE_LINK_L
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.MOVIE_IMAGE_LINK_M
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.TYPE_CAST_MEMBER
+import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.customview.RatingDialogue
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.NetworkViewModel
 import com.decodetalkers.radioalarm.application.MainApplication
@@ -43,7 +48,8 @@ import java.lang.Exception
 class MovieDetailActivity : YouTubeBaseActivity() {
     private lateinit var mMovie: MovieModel
 
-    val mediaItemRecyclerAdapter = MediaItemRecycler(::loadMovieDetailsForActivity)
+    private val mediaItemRecyclerAdapter = MediaItemRecycler(::loadMovieDetailsForActivity)
+    private var sectionRecyclerAdapter = SectionRecycler(::loadMovieDetailsForActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,10 +78,18 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         movie_detail_vote_count.text = mMovie.vote_count.toString()
         initYoutubePlayer(mMovie.trailer)
         loadMovieCast(mMovie.movie_id)
+        loadMovieRecommendation(mMovie.movie_id)
 
-        movieDetail_ButtonRating.setOnClickListener {
-
+        if(mMovie.user_rating != -1F){
+            movieDetail_ButtonRating.setImageResource(R.drawable.ic_user_rating)
+            movie_detail_user_rating.visibility = View.VISIBLE
+            movie_detail_user_rating.text = mMovie.user_rating.times(2).toString()
+        } else {
+            movieDetail_ButtonRating.setOnClickListener {
+                showRatingDialogue()
+            }
         }
+
     }
 
     private fun initYoutubePlayer(trailerId: String) {
@@ -117,6 +131,23 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         }
     }
 
+    private fun loadMovieRecommendation(movieId: Int) {
+        UiManager().setProgressBarState(movie_detail_rec_progress_bar, true)
+        CoroutineScope(Dispatchers.IO).launch {
+            getMovieBasedRecommendation(movieId).collect {
+                withContext(Dispatchers.Main) {
+                    UiManager().setProgressBarState(movie_detail_rec_progress_bar, false)
+                    sectionRecyclerAdapter.setItem_List(it)
+                    movie_detail_rec_recycler.apply {
+                        layoutManager =
+                            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                        this.adapter = sectionRecyclerAdapter
+                    }
+                }
+            }
+        }
+    }
+
     private fun loadMovieDetailsForActivity(
         movieId: String,
         movieImageView: ImageView,
@@ -124,11 +155,29 @@ class MovieDetailActivity : YouTubeBaseActivity() {
     ) {
         if (type != TYPE_CAST_MEMBER) {
             CoroutineScope(Dispatchers.IO).launch {
-
+                UiManager().setProgressBarState(movie_detail_rec_progress_bar, true)
+                getMovieById(movieId).collect {
+                    withContext(Dispatchers.Main) {
+                        UiManager().setProgressBarState(movie_detail_rec_progress_bar, false)
+                        val intent =
+                            Intent(this@MovieDetailActivity, MovieDetailActivity::class.java)
+                        intent.putExtra("movie_model", it)
+                        val actOptions = ActivityOptions.makeSceneTransitionAnimation(
+                            this@MovieDetailActivity,
+                            movieImageView,
+                            "SharedPoster"
+                        )
+                        startActivity(intent, actOptions.toBundle())
+                    }
+                }
             }
         }
     }
 
+    private fun getMovieById(movieId: String) = flow {
+        val response = RetrofitBuilder.pimApiService.getMovieById(movieId, "2018170873").body() as MovieModel
+        emit(response)
+    }
 
     private fun getCastByMovieId(movieId: Int) = flow {
         val response = RetrofitBuilder.pimApiService.getMovieCastById(movieId)
@@ -136,21 +185,41 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         emit(response)
     }
 
-    private fun addMovieRating(userId: Int, movieId: Int, rating: Float) = flow{
-        try {
-            val params = HashMap<String, String>()
-            params["userId"] = userId.toString()
-            params["movieId"] = movieId.toString()
-            params["rating"] = rating.toString()
-            val response = RetrofitBuilder.pimApiService.addMovieRating(params)
-            emit(true)
-        } catch (e: Exception){
-            emit(false)
-        }
+    private fun addMovieRating(userId: Int, movieId: Int, rating: Float) = flow {
+        val response = RetrofitBuilder.pimApiService.addMovieRating(userId, movieId, rating)
+        emit(response.code())
     }
 
-    private fun showRatingDialogue(){
-        //AlertDialog.Builder(this).
+    private fun getMovieBasedRecommendation(movieId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.getMovieBasedRecommendation(movieId)
+            .body() as List<SectionModel>
+        emit(response)
+    }
+
+    private fun showRatingDialogue() {
+        val ratingDialogue = RatingDialogue(this, ::onRating)
+        ratingDialogue.show()
+    }
+
+    private fun onRating(rating: Float) {
+        CoroutineScope(Dispatchers.IO).launch {
+            addMovieRating(2018170873, mMovie.movie_id, rating).collect {
+                Log.d("rating", "onRating: rating added")
+                withContext(Dispatchers.Main) {
+                    if(it == 200) {
+                        Toast.makeText(this@MovieDetailActivity, "Rating Added", Toast.LENGTH_SHORT)
+                            .show()
+                        movieDetail_ButtonRating.setImageResource(R.drawable.ic_user_rating)
+                        movieDetail_ButtonRating.isClickable = false
+                        movie_detail_user_rating.visibility = View.VISIBLE
+                        movie_detail_user_rating.text = rating.times(2).toString()
+                    } else {
+                        Toast.makeText(this@MovieDetailActivity, "Error adding rating", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
     }
 
 
