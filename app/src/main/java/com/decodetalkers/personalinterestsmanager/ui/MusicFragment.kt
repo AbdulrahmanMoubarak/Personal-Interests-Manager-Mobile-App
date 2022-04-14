@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.decodetalkers.personalinterestsmanager.R
+import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.TYPE_ARTIST
 import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
@@ -60,7 +61,7 @@ class MusicFragment : Fragment() {
     private fun loadSections() {
         UiManager().setProgressBarState(music_progress, true)
         CoroutineScope(Dispatchers.IO).launch {
-            networkVM.getMusicHomePage(2018170873).collect {
+            networkVM.getMusicHomePage(AppUser.user_id).collect {
                 withContext(Dispatchers.Main) {
                     try {
                         UiManager().setProgressBarState(music_progress, false)

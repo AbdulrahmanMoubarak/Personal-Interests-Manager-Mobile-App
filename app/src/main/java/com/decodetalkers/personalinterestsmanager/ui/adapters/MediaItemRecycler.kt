@@ -14,10 +14,11 @@ import com.bumptech.glide.Glide
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.radioalarm.application.MainApplication
+import java.lang.Exception
 
 class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: String) -> Unit) :
     RecyclerView.Adapter<MediaItemRecycler.MediaItemViewHolder>() {
-    private var Item_List = ArrayList<MediaItemOfListModel>()
+    private var Item_List = arrayListOf<MediaItemOfListModel>()
 
     companion object {
         const val TYPE_SONG = "song"
@@ -98,7 +99,15 @@ class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: St
     }
 
     fun setItem_List(list: List<MediaItemOfListModel>) {
-        Item_List = list as ArrayList<MediaItemOfListModel>
+        var i=0
+        for (item in list) {
+            try {
+                Item_List.add(list.get(i))
+            }catch (e: Exception){
+
+            }
+            i++
+        }
     }
 
     class MediaItemViewHolder : RecyclerView.ViewHolder {

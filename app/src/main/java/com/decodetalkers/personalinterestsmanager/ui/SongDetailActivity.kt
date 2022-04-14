@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.decodetalkers.personalinterestsmanager.R
+import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.ArtistModel
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
@@ -67,18 +68,18 @@ class SongDetailActivity : YouTubeBaseActivity() {
                     youTubePlayer.play()
                     youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL)
                     music_detail_miniplayer.subscribeYoutubePlayer(youTubePlayer)
-                    try {
-                        getSongListeningTimesUpdateResult(500)
-                    }catch (e: Exception){
-                        Log.d(SongDetailActivity::class.java.simpleName, "updateListening: Failed")
-                    }
+//                    try {
+//                        getSongListeningTimesUpdateResult(500)
+//                    }catch (e: Exception){
+//                        Log.d(SongDetailActivity::class.java.simpleName, "updateListening: Failed")
+//                    }
                 }
 
                 override fun onInitializationFailure(
                     provider: YouTubePlayer.Provider,
                     youTubeInitializationResult: YouTubeInitializationResult
                 ) {
-                    Toast.makeText(applicationContext, "Video player Failed", Toast.LENGTH_SHORT)
+                    Toast.makeText(applicationContext, "Video player failed to start", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
@@ -161,7 +162,7 @@ class SongDetailActivity : YouTubeBaseActivity() {
 
     private fun getSongListeningTimesUpdateResult(blockTime: Long){
         CoroutineScope(Dispatchers.IO).launch {
-            updateUserSongListening(mSong.song_spotify_id, 2018170873).collect {
+            updateUserSongListening(mSong.song_spotify_id, AppUser.user_id).collect {
                 if (it != 200){
                     delay(blockTime)
                     if (blockTime < 20000){

@@ -8,6 +8,7 @@ import android.os.CountDownTimer
 import android.view.View
 import android.view.View.VISIBLE
 import com.decodetalkers.personalinterestsmanager.R
+import com.decodetalkers.personalinterestsmanager.application.AppUser
 import kotlinx.android.synthetic.main.activity_main.*
 
 class LoginActivity : AppCompatActivity() {
@@ -19,6 +20,7 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             Intent(this, HomeActivity::class.java).apply {
                 finish()
+                AppUser.setUserData(46, "AbdulRahman Moubarak", "oddaled@gmail.com")
                 startActivity(this)
             }
         }

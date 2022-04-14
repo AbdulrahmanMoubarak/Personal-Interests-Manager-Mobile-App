@@ -1,5 +1,6 @@
 package com.decodetalkers.personalinterestsmanager.models
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 

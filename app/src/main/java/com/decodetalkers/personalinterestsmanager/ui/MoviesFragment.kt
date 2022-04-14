@@ -19,18 +19,19 @@ import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.NetworkViewModel
 import kotlinx.android.synthetic.main.fragment_movies.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import android.provider.MediaStore.Video.Thumbnails.VIDEO_ID
 import android.util.Log
+import com.decodetalkers.personalinterestsmanager.application.AppUser
+import com.decodetalkers.personalinterestsmanager.viewmodels.DatabaseViewModel
+import kotlinx.coroutines.*
 
 class MoviesFragment : Fragment() {
 
     private var sectionRecyclerAdapter = SectionRecycler(::loadMovieDetailsForActivity)
     private lateinit var networkVM: NetworkViewModel
+    private lateinit var databaseVM: DatabaseViewModel
+    private lateinit var cJob: Job
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +48,8 @@ class MoviesFragment : Fragment() {
 
         networkVM =
             ViewModelProvider(requireActivity()).get(NetworkViewModel::class.java)
+        databaseVM =
+            ViewModelProvider(requireActivity()).get(DatabaseViewModel::class.java)
 
         setRecyclerList(arrayListOf())
 
@@ -59,11 +62,18 @@ class MoviesFragment : Fragment() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cJob.cancel()
+    }
+
     private fun loadSections() {
         try {
             UiManager().setProgressBarState(movies_progress, true)
-            CoroutineScope(Dispatchers.IO).launch {
-                networkVM.getMoviesHomePage(1).collect {
+            cJob = CoroutineScope(Dispatchers.IO).launch {
+                networkVM.getMoviesHomePage(AppUser.user_id).collect {
+                    databaseVM.deleteDatabaseRecords()
+                    databaseVM.insertSections(it, DatabaseViewModel.MOVIES)
                     withContext(Dispatchers.Main) {
                         try {
                             UiManager().setProgressBarState(movies_progress, false)
@@ -75,7 +85,15 @@ class MoviesFragment : Fragment() {
                 }
             }
         }catch (e: Exception){
-
+            CoroutineScope(Dispatchers.IO).launch {
+                databaseVM.getSectionsForMediaType(DatabaseViewModel.MOVIES).collect { backup->
+                    withContext(Dispatchers.Main){
+                        backup?.let {
+                            setRecyclerList(backup)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -90,7 +108,7 @@ class MoviesFragment : Fragment() {
 
     private fun loadMovieDetailsForActivity(movieId: String, movieImageView: ImageView, type: String = ""){
         UiManager().setProgressBarState(movies_progress, true)
-        CoroutineScope(Dispatchers.IO).launch {
+        cJob = CoroutineScope(Dispatchers.IO).launch {
             networkVM.getMovieById(movieId).collect{
                 withContext(Dispatchers.Main) {
                     UiManager().setProgressBarState(movies_progress, false)

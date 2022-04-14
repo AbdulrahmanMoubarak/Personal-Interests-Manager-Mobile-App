@@ -41,7 +41,8 @@ interface RetrofitPimApi {
 
     @GET("/movies/movie-based-recommendation")
     suspend fun getMovieBasedRecommendation(
-        @Query("movieId") movieId: Int
+        @Query("movieId") movieId: Int,
+        @Query("userId") userId: Int
     ): Response<List<SectionModel>>
 
     @GET("/music/main")
@@ -71,6 +72,10 @@ interface RetrofitPimApi {
         @Field("songId") songId: String
     ): Response<ResponseBody>
 
+    @GET("/books/main")
+    suspend fun getBooksHomeResults(
+        @Query("userId") userId: Int
+    ) : Response<List<SectionModel>>
 
 
 }

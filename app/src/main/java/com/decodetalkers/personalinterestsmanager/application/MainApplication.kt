@@ -7,7 +7,7 @@ class MainApplication: Application() {
 
     companion object{
         private lateinit var app: Application
-        fun getAppContext(): Context? {
+        fun getAppContext(): Context {
             return app.applicationContext
         }
 

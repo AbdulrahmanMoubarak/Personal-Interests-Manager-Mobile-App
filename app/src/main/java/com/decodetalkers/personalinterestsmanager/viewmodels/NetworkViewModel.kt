@@ -1,6 +1,7 @@
 package com.decodetalkers.personalinterestsmanager.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.personalinterestsmanager.models.MovieModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
@@ -24,13 +25,17 @@ class NetworkViewModel: ViewModel() {
     }
 
     fun getMoviesHomePage(userId: Int) = flow {
-        val response = RetrofitBuilder.pimApiService.getMoviesHomeResults(userId)
-            .body() as List<SectionModel>
-        emit(response)
+        try {
+            val response = RetrofitBuilder.pimApiService.getMoviesHomeResults(userId)
+                .body() as List<SectionModel>
+            emit(response)
+        }catch (e:Exception){
+            emit(arrayListOf())
+        }
     }
 
     fun getMovieById(movieId: String) = flow {
-        val response = RetrofitBuilder.pimApiService.getMovieById(movieId, "2018170873").body() as MovieModel
+        val response = RetrofitBuilder.pimApiService.getMovieById(movieId, AppUser.user_id.toString()).body() as MovieModel
         emit(response)
     }
 
@@ -59,4 +64,11 @@ class NetworkViewModel: ViewModel() {
             emit(false)
         }
     }
+
+    fun getBooksHomePage(userId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.getBooksHomeResults(userId)
+            .body() as List<SectionModel>
+        emit(response)
+    }
+
 }

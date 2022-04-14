@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.decodetalkers.personalinterestsmanager.R
+import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 
 import com.decodetalkers.personalinterestsmanager.models.MovieModel
@@ -134,7 +135,7 @@ class MovieDetailActivity : YouTubeBaseActivity() {
     private fun loadMovieRecommendation(movieId: Int) {
         UiManager().setProgressBarState(movie_detail_rec_progress_bar, true)
         CoroutineScope(Dispatchers.IO).launch {
-            getMovieBasedRecommendation(movieId).collect {
+            getMovieBasedRecommendation(movieId, AppUser.user_id).collect {
                 withContext(Dispatchers.Main) {
                     UiManager().setProgressBarState(movie_detail_rec_progress_bar, false)
                     sectionRecyclerAdapter.setItem_List(it)
@@ -175,7 +176,7 @@ class MovieDetailActivity : YouTubeBaseActivity() {
     }
 
     private fun getMovieById(movieId: String) = flow {
-        val response = RetrofitBuilder.pimApiService.getMovieById(movieId, "2018170873").body() as MovieModel
+        val response = RetrofitBuilder.pimApiService.getMovieById(movieId, AppUser.user_id.toString()).body() as MovieModel
         emit(response)
     }
 
@@ -190,8 +191,8 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         emit(response.code())
     }
 
-    private fun getMovieBasedRecommendation(movieId: Int) = flow {
-        val response = RetrofitBuilder.pimApiService.getMovieBasedRecommendation(movieId)
+    private fun getMovieBasedRecommendation(movieId: Int, userId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.getMovieBasedRecommendation(movieId, userId)
             .body() as List<SectionModel>
         emit(response)
     }
@@ -203,7 +204,7 @@ class MovieDetailActivity : YouTubeBaseActivity() {
 
     private fun onRating(rating: Float) {
         CoroutineScope(Dispatchers.IO).launch {
-            addMovieRating(2018170873, mMovie.movie_id, rating).collect {
+            addMovieRating(AppUser.user_id, mMovie.movie_id, rating).collect {
                 Log.d("rating", "onRating: rating added")
                 withContext(Dispatchers.Main) {
                     if(it == 200) {

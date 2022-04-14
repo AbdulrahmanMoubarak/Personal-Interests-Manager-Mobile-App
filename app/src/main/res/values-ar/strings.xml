@@ -17,4 +17,26 @@
     <string name="books">الكتب</string>
     <string name="music">الموسيقى</string>
     <string name="library">المكتبة</string>
+    <string name="chatbot">المساعد اللآلي</string>
+    <string name="Overview">نظرة عامة</string>
+    <string name="Genres">التصنيف</string>
+    <string name="vote_average">متوسط التقيمات</string>
+    <string name="Rating">التقيم</string>
+    <string name="production_companies">الشركات المنتجة</string>
+    <string name="Trailer">العرض التشويقي</string>
+    <string name="title_activity_song_detail">SongDetailActivity</string>
+    <!--  Strings used for fragments for navigation  -->
+    <string name="first_fragment_label">الجزء الاول</string>
+    <string name="second_fragment_label">الجزء الثانية</string>
+    <string name="next">التالي</string>
+    <string name="previous">السابق</string>
+    <string name="hello_first_fragment">مرحبا في الجزء الاولى</string>
+    <string name="hello_second_fragment">مرحبا في الجزء الثاني. معدل: %1$s</string>
+    <string name="powered_by">مشغل بواسطة</string>
+    <string name="Cast">طاقم الممثلين</string>
+    <string name="search">"ابحث هنا"</string>
+    <string name="search_results">"نتائج البحث عن "</string>
+    <string name="add_rating">اضافة تقييم</string>
+    <string name="submit">تأكيد</string>
+    <string name="cancel">إلغاء</string>
 </resources>
