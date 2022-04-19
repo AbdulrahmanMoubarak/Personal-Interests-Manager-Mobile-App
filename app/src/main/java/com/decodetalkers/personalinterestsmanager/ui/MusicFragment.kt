@@ -17,7 +17,7 @@ import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.
 import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
-import com.decodetalkers.personalinterestsmanager.viewmodels.NetworkViewModel
+import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.fragment_music.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +30,7 @@ class MusicFragment : Fragment() {
 
     //private var sectionRecyclerAdapter = SectionRecycler(::loadSongDetailsForActivity)
     private var sectionRecyclerAdapter = SectionRecycler(::loadSongDetailsForActivity)
-    private lateinit var networkVM: NetworkViewModel
+    private lateinit var homeScreensVM: HomeScreensViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,28 +44,30 @@ class MusicFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         titleCardMusic.setHeaderType(MediaHeader.HEADER_MUSIC)
-        networkVM =
-            ViewModelProvider(requireActivity()).get(NetworkViewModel::class.java)
+        homeScreensVM =
+            ViewModelProvider(requireActivity()).get(HomeScreensViewModel::class.java)
 
         setRecyclerList(arrayListOf())
 
-        loadSections()
+        loadSections(false)
 
         swipeRefreshMusic.setOnRefreshListener {
             setRecyclerList(arrayListOf())
-            loadSections()
+            loadSections(true)
             swipeRefreshMusic.isRefreshing = false
         }
     }
 
-    private fun loadSections() {
+    private fun loadSections(reload: Boolean) {
         UiManager().setProgressBarState(music_progress, true)
         CoroutineScope(Dispatchers.IO).launch {
-            networkVM.getMusicHomePage(AppUser.user_id).collect {
+            homeScreensVM.getMusicHomePage(AppUser.user_id, reload).collect {
                 withContext(Dispatchers.Main) {
+                    UiManager().setProgressBarState(music_progress, false)
                     try {
-                        UiManager().setProgressBarState(music_progress, false)
-                        setRecyclerList(it)
+                        it?.let {
+                            setRecyclerList(it)
+                        }
                     }catch (e:Exception){
 
                     }
@@ -87,7 +89,7 @@ class MusicFragment : Fragment() {
         if(type != TYPE_ARTIST) {
             UiManager().setProgressBarState(music_progress, true)
             CoroutineScope(Dispatchers.IO).launch {
-                networkVM.getSongById(songId).collect {
+                homeScreensVM.getSongById(songId).collect {
                     withContext(Dispatchers.Main) {
                         UiManager().setProgressBarState(music_progress, false)
                         val intent = Intent(requireContext(), SongDetailActivity::class.java)

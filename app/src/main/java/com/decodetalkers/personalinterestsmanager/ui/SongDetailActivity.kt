@@ -2,8 +2,11 @@ package com.decodetalkers.personalinterestsmanager.ui
 
 import android.app.ActivityOptions
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -43,6 +46,12 @@ class SongDetailActivity : YouTubeBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_detail)
 
+        if (Build.VERSION.SDK_INT >= 23) {
+            val window = this.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = getColor(R.color.black)
+        }
+
         initViews()
 
     }
@@ -54,6 +63,12 @@ class SongDetailActivity : YouTubeBaseActivity() {
         initYoutubePlayer(mSong.youtube_id)
         loadSongRecommendation(mSong.song_spotify_id)
         music_detail_yt_player.onFocusChangeListener = null
+
+        btnSpotify.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse(mSong.spotify_link)
+            startActivity(i)
+        }
     }
 
     private fun initYoutubePlayer(songYtId: String) {
@@ -68,11 +83,11 @@ class SongDetailActivity : YouTubeBaseActivity() {
                     youTubePlayer.play()
                     youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL)
                     music_detail_miniplayer.subscribeYoutubePlayer(youTubePlayer)
-//                    try {
-//                        getSongListeningTimesUpdateResult(500)
-//                    }catch (e: Exception){
-//                        Log.d(SongDetailActivity::class.java.simpleName, "updateListening: Failed")
-//                    }
+                    try {
+                        getSongListeningTimesUpdateResult(500)
+                    }catch (e: Exception){
+                        Log.d(SongDetailActivity::class.java.simpleName, "updateListening: Failed")
+                    }
                 }
 
                 override fun onInitializationFailure(

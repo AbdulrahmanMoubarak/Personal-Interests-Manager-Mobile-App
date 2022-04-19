@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitBuilder {
 
-    private const val PERSONAL_INTERESTS_MANAGER_SERVER_URL = "http://192.168.1.11:5001/"
+    private const val PERSONAL_INTERESTS_MANAGER_SERVER_URL = "http://192.168.1.7:5001/"
     //private const val PERSONAL_INTERESTS_MANAGER_SERVER_URL = "https://cc59-41-129-61-49.ngrok.io"
 
     private fun getRetrofit(url: String): Retrofit {

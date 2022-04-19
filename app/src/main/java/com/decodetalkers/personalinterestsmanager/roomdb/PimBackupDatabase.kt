@@ -1,6 +1,7 @@
 package com.decodetalkers.personalinterestsmanager.roomdb
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Insert
 import androidx.room.Room
@@ -40,20 +41,26 @@ abstract class PimBackupDatabase: RoomDatabase() {
             }
             secList.add(com.decodetalkers.personalinterestsmanager.models.SectionModel(section.section_name, itemList))
         }
+        Log.d(PimBackupDatabase::class.java.simpleName, "getSpecificTypeSections: ${type} size = ${secList.size}")
         return secList
     }
 
     suspend fun insertTypeSections(sections: List<com.decodetalkers.personalinterestsmanager.models.SectionModel>, type: String){
         for (section in sections){
-            val secId = dao().insertSection(SectionModel(section.section_name, 0, type))
+            dao().insertSection(SectionModel(section.section_name, 0, type))
+            val sectionId = dao().getSectionId(section.section_name, type)
+            Log.d(PimBackupDatabase::class.java.simpleName, "Db sectionId: ${type} = ${sectionId}")
             for(item in section.section_mediaItems){
-                dao().insertMediaItem(MediaItemModel(secId.toInt(),item.item_id, item.item_name, item.item_image, item.item_type))
+                dao().insertMediaItem(MediaItemModel(sectionId,item.item_id, item.item_name, item.item_image, item.item_type))
             }
         }
     }
 
-    suspend fun deleteAllData(){
-        dao().deleteAllItems()
-        dao().deleteAllSections()
+    suspend fun deleteAllData(type: String){
+        val secList = dao().getSectionsIdsByType(type)
+        for (id in secList){
+            dao().deleteAllItemsOfSection(id)
+        }
+        dao().deleteAllSections(type)
     }
 }

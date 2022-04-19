@@ -2,6 +2,8 @@ package com.decodetalkers.radioalarm.application
 
 import android.app.Application
 import android.content.Context
+import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
+import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 
 class MainApplication: Application() {
 

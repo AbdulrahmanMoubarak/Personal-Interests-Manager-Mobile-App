@@ -13,8 +13,9 @@ interface PimDao {
         const val ITEMS_TABLE = "items_table"
         const val SECTIONS_TABLE = "sections_table"
     }
+
     @Insert
-    suspend fun insertSection(section: SectionModel): Long
+    suspend fun insertSection(section: SectionModel)
 
     @Insert
     suspend fun insertMediaItem(mediaItem: MediaItemModel)
@@ -22,12 +23,18 @@ interface PimDao {
     @Query("SELECT * FROM $ITEMS_TABLE WHERE section_id = (:sectionId)")
     suspend fun getSectionItems(sectionId: Int):List<MediaItemModel>
 
+    @Query("SELECT section_id FROM $SECTIONS_TABLE WHERE section_name = (:name) AND media_type = (:type)")
+    suspend fun getSectionId(name: String, type: String): Int
+
+    @Query("SELECT section_id FROM $SECTIONS_TABLE WHERE media_type = (:type)")
+    suspend fun getSectionsIdsByType(type: String): List<Int>
+
     @Query("SELECT * FROM $SECTIONS_TABLE WHERE media_type = (:mediaType)")
     suspend fun getTypeSections(mediaType: String):List<SectionModel>
 
-    @Query("DELETE FROM $SECTIONS_TABLE")
-    suspend fun deleteAllSections()
+    @Query("DELETE FROM $SECTIONS_TABLE WHERE media_type = (:type)")
+    suspend fun deleteAllSections(type: String)
 
-    @Query("DELETE FROM $ITEMS_TABLE")
-    suspend fun deleteAllItems()
+    @Query("DELETE FROM $ITEMS_TABLE WHERE section_id = (:sectionId)")
+    suspend fun deleteAllItemsOfSection(sectionId: Int)
 }

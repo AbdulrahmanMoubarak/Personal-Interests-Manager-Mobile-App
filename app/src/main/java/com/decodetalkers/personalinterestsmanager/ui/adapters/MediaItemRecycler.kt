@@ -18,7 +18,7 @@ import java.lang.Exception
 
 class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: String) -> Unit) :
     RecyclerView.Adapter<MediaItemRecycler.MediaItemViewHolder>() {
-    private var Item_List = arrayListOf<MediaItemOfListModel>()
+    private var Item_List :List<MediaItemOfListModel> = arrayListOf()
 
     companion object {
         const val TYPE_SONG = "song"
@@ -74,6 +74,13 @@ class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: St
                         .circleCrop()
                         .into(holder.itemImage)
                 }
+            } else if(Item_List.get(position).item_type.lowercase() == TYPE_BOOK){
+                MainApplication.getAppContext()?.let {
+                    Glide.with(it)
+                        .load(Item_List.get(position).item_image)
+                        .error(R.drawable.ic_book_circle_svgr)
+                        .into(holder.itemImage)
+                }
             } else {
                 holder.itemImage.load(Item_List.get(position).item_image) {
                     crossfade(true)
@@ -99,15 +106,7 @@ class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: St
     }
 
     fun setItem_List(list: List<MediaItemOfListModel>) {
-        var i=0
-        for (item in list) {
-            try {
-                Item_List.add(list.get(i))
-            }catch (e: Exception){
-
-            }
-            i++
-        }
+        this.Item_List = list
     }
 
     class MediaItemViewHolder : RecyclerView.ViewHolder {

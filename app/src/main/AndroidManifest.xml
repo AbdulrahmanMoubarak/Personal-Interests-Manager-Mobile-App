@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.BookDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SearchResultActivity"
             android:exported="false" />
         <activity

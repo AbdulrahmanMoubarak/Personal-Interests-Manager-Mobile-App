@@ -1,9 +1,6 @@
 package com.decodetalkers.personalinterestsmanager.retrofit
 
-import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
-import com.decodetalkers.personalinterestsmanager.models.MovieModel
-import com.decodetalkers.personalinterestsmanager.models.SectionModel
-import com.decodetalkers.personalinterestsmanager.models.SongModel
+import com.decodetalkers.personalinterestsmanager.models.*
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -17,7 +14,7 @@ interface RetrofitPimApi {
 
     @GET("/movies/search")
     suspend fun getMovieById(
-        @Query("id") id :String,
+        @Query("id") id :Int,
         @Query("userId") userId :String
     ) : Response<MovieModel>
 
@@ -77,5 +74,28 @@ interface RetrofitPimApi {
         @Query("userId") userId: Int
     ) : Response<List<SectionModel>>
 
+    @GET("/books/search")
+    suspend fun getBooksSearchResults(
+        @Query("q") query: String
+    ):Response<List<MediaItemOfListModel>>
 
+    @GET("/books/search")
+    suspend fun getBookById(
+        @Query("id") bookId: String,
+        @Query("userId") userId: Int
+    ): Response<BookModel>
+
+    @FormUrlEncoded
+    @POST("/books/rate")
+    suspend fun addBookRating(
+        @Field("userId") userId: Int,
+        @Field("bookId") bookId: String,
+        @Field("bookName") bookName: String,
+        @Field("rating") rating: Float,
+    ): Response<ResponseBody>
+
+    @GET("/books/book-based-recommendation")
+    suspend fun getBookBasedRecommendation(
+        @Query("bookId")bookId: String
+    ): Response<List<SectionModel>>
 }

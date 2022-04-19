@@ -1,20 +1,16 @@
 package com.decodetalkers.personalinterestsmanager.ui
 
-import android.app.Activity
 import android.app.ActivityOptions
-import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.decodetalkers.personalinterestsmanager.R
@@ -31,20 +27,16 @@ import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.
 import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
 import com.decodetalkers.personalinterestsmanager.ui.customview.RatingDialogue
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
-import com.decodetalkers.personalinterestsmanager.viewmodels.NetworkViewModel
-import com.decodetalkers.radioalarm.application.MainApplication
 import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import kotlinx.android.synthetic.main.activity_movie_detail.*
-import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class MovieDetailActivity : YouTubeBaseActivity() {
     private lateinit var mMovie: MovieModel
@@ -56,6 +48,12 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
         //supportActionBar?.hide()
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            val window = this.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = getColor(R.color.black)
+        }
 
         initViews()
     }
@@ -80,6 +78,18 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         initYoutubePlayer(mMovie.trailer)
         loadMovieCast(mMovie.movie_id)
         loadMovieRecommendation(mMovie.movie_id)
+
+        btnImdb.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("https://www.imdb.com/title/${mMovie.imdb_id}/")
+            startActivity(i)
+        }
+
+        btnTmdb.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("https://www.themoviedb.org/movie/${mMovie.movie_id}/")
+            startActivity(i)
+        }
 
         if(mMovie.user_rating != -1F){
             movieDetail_ButtonRating.setImageResource(R.drawable.ic_user_rating)
@@ -176,7 +186,7 @@ class MovieDetailActivity : YouTubeBaseActivity() {
     }
 
     private fun getMovieById(movieId: String) = flow {
-        val response = RetrofitBuilder.pimApiService.getMovieById(movieId, AppUser.user_id.toString()).body() as MovieModel
+        val response = RetrofitBuilder.pimApiService.getMovieById(movieId.toInt(), AppUser.user_id.toString()).body() as MovieModel
         emit(response)
     }
 
