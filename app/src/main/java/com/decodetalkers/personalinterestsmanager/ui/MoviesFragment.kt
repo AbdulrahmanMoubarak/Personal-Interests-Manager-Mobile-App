@@ -3,6 +3,7 @@ package com.decodetalkers.personalinterestsmanager.ui
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,17 +46,46 @@ class MoviesFragment : Fragment() {
 
         setRecyclerList(arrayListOf())
 
-        loadSections(false)
-
         swipeRefreshMovies.setOnRefreshListener {
             setRecyclerList(arrayListOf())
-            loadSections(true)
+            loadSectionsAsync(true)
             swipeRefreshMovies.isRefreshing = false
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        loadSectionsAsync(false)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    private fun loadSectionsAsync(reload: Boolean) {
+        UiManager().setProgressBarState(MoviesloadingProgressBar, true)
+        if (HomeScreensViewModel.isMoviesLoaded && !reload) {
+            loadSections(reload)
+        } else {
+            try {
+                cJob = CoroutineScope(Dispatchers.IO).launch {
+                    homeScreensVM.getMoviesHomePageResultsAsync(AppUser.user_id, reload).collect {
+                        withContext(Dispatchers.Main) {
+                            try {
+                                sectionRecyclerAdapter.addSectionItem(it)
+                                Log.d("MoviesFragment", "loadSectionsAsync: ${it.section_name} loaded")
+                                UiManager().setProgressBarState(MoviesloadingProgressBar, false)
+                                UiManager().setProgressBarState(movies_progress, false)
+                            }catch (e: Exception){
+
+                            }
+                        }
+                    }
+                }
+            }catch (e:Exception){
+
+            }
+        }
     }
 
     private fun loadSections(reload: Boolean) {
@@ -66,19 +96,20 @@ class MoviesFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         try {
                             UiManager().setProgressBarState(movies_progress, false)
+                            UiManager().setProgressBarState(MoviesloadingProgressBar, false)
                             setRecyclerList(it)
-                        }catch (e:Exception){
+                        } catch (e: Exception) {
 
                         }
                     }
                 }
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
 
         }
     }
 
-    private fun setRecyclerList(list: List<SectionModel>){
+    private fun setRecyclerList(list: List<SectionModel>) {
         sectionRecyclerAdapter.setItem_List(list)
         movies_section_recycler.apply {
             layoutManager =
@@ -87,15 +118,23 @@ class MoviesFragment : Fragment() {
         }
     }
 
-    private fun loadMovieDetailsForActivity(movieId: String, movieImageView: ImageView, type: String = ""){
+    private fun loadMovieDetailsForActivity(
+        movieId: String,
+        movieImageView: ImageView,
+        type: String = ""
+    ) {
         UiManager().setProgressBarState(movies_progress, true)
         cJob = CoroutineScope(Dispatchers.IO).launch {
-            homeScreensVM.getMovieById(movieId).collect{
+            homeScreensVM.getMovieById(movieId).collect {
                 withContext(Dispatchers.Main) {
                     UiManager().setProgressBarState(movies_progress, false)
                     val intent = Intent(requireContext(), MovieDetailActivity::class.java)
                     intent.putExtra("movie_model", it)
-                    val actOptions = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), movieImageView, "SharedPoster")
+                    val actOptions = ActivityOptions.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        movieImageView,
+                        "SharedPoster"
+                    )
                     startActivity(intent, actOptions.toBundle())
                 }
             }

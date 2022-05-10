@@ -10,4 +10,5 @@ class SectionModel(
     @SerializedName("items")
     var section_mediaItems: List<MediaItemOfListModel>
 ) {
+    var order: Int = 0
 }

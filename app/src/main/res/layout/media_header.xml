@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/mediaHeaderImageSize"
+                android:layout_height="@dimen/mediaHeaderImageSize"
                 android:layout_margin="5dp"
                 android:src="@drawable/ic_movie_circle_svg"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +39,7 @@
                 android:layout_margin="8dp"
                 android:text="@string/movies"
                 android:textColor="#000000"
-                android:textSize="30sp"
+                android:textSize="@dimen/mediaHeaderTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -48,8 +48,8 @@
 
             <ImageView
                 android:id="@+id/header_searchIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/mediaHeaderImageSize"
+                android:layout_height="@dimen/mediaHeaderImageSize"
                 android:layout_margin="8dp"
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/ic_baseline_search_24"
@@ -61,8 +61,8 @@
             <ImageView
                 android:visibility="gone"
                 android:id="@+id/header_profile"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/mediaHeaderImageSize"
+                android:layout_height="@dimen/mediaHeaderImageSize"
                 android:layout_margin="8dp"
                 android:src="@drawable/ic_baseline_account_circle_24"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -106,8 +106,8 @@
             <ImageView
                 android:id="@+id/search_backArrow"
                 android:layout_margin="6dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/mediaHeaderImageSize"
+                android:layout_height="@dimen/mediaHeaderImageSize"
                 android:src="@drawable/ic_baseline_arrow_back_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

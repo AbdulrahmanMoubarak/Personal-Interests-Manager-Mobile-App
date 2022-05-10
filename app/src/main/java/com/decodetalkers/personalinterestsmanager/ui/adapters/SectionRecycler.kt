@@ -31,11 +31,21 @@ class SectionRecycler(val onClick:(itemId: String, image: ImageView, type: Strin
 
     override fun getItemCount(): Int {
         return Item_List.size
-        notifyDataSetChanged()
     }
 
     fun setItem_List(list: List<SectionModel>) {
         Item_List = list as ArrayList<SectionModel>
+    }
+
+    private fun getItemList(): List<SectionModel>{
+        return Item_List
+    }
+
+    fun addSectionItem(item: SectionModel){
+        Item_List.add(item)
+        notifyItemInserted(Item_List.size-1)
+        Item_List.sortedWith(compareBy({it.order}))
+        notifyDataSetChanged()
     }
 
     inner class SectionViewModel : RecyclerView.ViewHolder {

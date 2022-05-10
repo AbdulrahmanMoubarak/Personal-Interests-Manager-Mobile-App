@@ -7,6 +7,7 @@
     tools:context=".ui.SongDetailActivity">
 
     <com.google.android.youtube.player.YouTubePlayerView
+        android:transitionName="ytPlayer"
         android:translationZ="90dp"
         android:id="@+id/music_detail_yt_player"
         android:layout_width="match_parent"
@@ -87,7 +88,7 @@
                 android:text="Song Name"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="@dimen/SectionTextSize"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/song_detail_image_card"
@@ -129,7 +130,7 @@
                         android:layout_margin="16dp"
                         android:text="@string/Links"
                         android:textColor="@color/black"
-                        android:textSize="17sp"
+                        android:textSize="@dimen/cardTitleTextSize"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -143,7 +144,7 @@
                         android:src="@drawable/ic_spotify_svgrepo_com"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txtLinks" />
+                        app:layout_constraintTop_toBottomOf="@+id/song_txtLinks" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

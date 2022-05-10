@@ -3,15 +3,15 @@ package com.decodetalkers.personalinterestsmanager.viewmodels
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.decodetalkers.personalinterestsmanager.application.AppUser
-import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.models.*
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
 import com.decodetalkers.personalinterestsmanager.roomdb.PimBackupDatabase
 import com.decodetalkers.radioalarm.application.MainApplication
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class HomeScreensViewModel : ViewModel() {
@@ -21,11 +21,11 @@ class HomeScreensViewModel : ViewModel() {
         const val BOOKS = "books"
         const val MUSIC = "music"
 
-        private var isMoviesLoaded = false
-        private var isMusicLoaded = false
-        private var isBooksLoaded = false
+        var isMoviesLoaded = false
+        var isMusicLoaded = false
+        var isBooksLoaded = false
 
-        private lateinit var moviesSections: List<SectionModel>
+        private var moviesSections: MutableList<SectionModel> = mutableListOf()
         private lateinit var musicSections: List<SectionModel>
         private lateinit var booksSections: List<SectionModel>
     }
@@ -52,13 +52,13 @@ class HomeScreensViewModel : ViewModel() {
 
     fun getMoviesHomePage(userId: Int, reload: Boolean) = flow {
         try {
-            if(!isMoviesLoaded || reload) {
+            if (!isMoviesLoaded || reload) {
                 val response = RetrofitBuilder.pimApiService.getMoviesHomeResults(userId)
-                    .body() as List<SectionModel>
+                    .body() as MutableList<SectionModel>
                 moviesSections = response
                 isMoviesLoaded = true
                 emit(response)
-            }else{
+            } else {
                 emit(moviesSections)
             }
         } catch (e: Exception) {
@@ -68,10 +68,52 @@ class HomeScreensViewModel : ViewModel() {
                     "Check Your Internet Connection",
                     Toast.LENGTH_SHORT
                 ).show()
-            }catch (e: Exception){
+            } catch (e: Exception) {
 
             }
         }
+    }
+
+    fun getMoviesHomePageResultsAsync(userId: Int, reload: Boolean) = flow {
+        isMoviesLoaded=false
+        val sectionLines = RetrofitBuilder.pimApiService.getMoviesSectionNames(userId)
+            .body() as List<MutableMap<String, String>>
+        var i = 0
+        for (item in sectionLines) {
+            item["seq"] = i.toString()
+            getMovieSectionItems(item).collect {
+                emit(SectionModel(item["name"]!!,it).apply {
+                    order = item["seq"]!!.toInt()
+                })
+            }
+            i++
+        }
+    }
+
+    private fun getSectionItems(secList: List<Map<String, String>>) = flow{
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                for (section in secList) {
+                    getMovieSectionItems(section).collect {
+                        emit(it)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+
+        }
+    }
+
+    fun getMovieSectionItems(section: Map<String, String>) = flow{
+        val name = section["name"]!!.replace(' ', '+')
+        val userId = if (section["userId"] != null) section["userId"] else null
+        val year = if (section["year"] != null) section["year"] else null
+        val genre = if (section["genre"] != null) section["genre"] else null
+        val response = RetrofitBuilder.pimApiService.getSectionContent(name, userId?.toInt(), year?.toInt(), genre?.toInt())
+            .body() as List<MediaItemOfListModel>
+        moviesSections.add(SectionModel(section["name"]!!,response))
+        isMoviesLoaded = true
+        emit(response)
     }
 
     fun getMovieById(movieId: String) = flow {
@@ -133,21 +175,25 @@ class HomeScreensViewModel : ViewModel() {
                 emit(booksSections)
             }
         } catch (e: Exception) {
-            Toast.makeText(
-                MainApplication.getAppContext(),
-                "Check Your Internet Connection",
-                Toast.LENGTH_SHORT
-            ).show()
+            try {
+                Toast.makeText(
+                    MainApplication.getAppContext(),
+                    "Check Your Internet Connection",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }catch (e: Exception){
+
+            }
         }
     }
 
-    fun getBookById(bookId: String, userId: Int) = flow{
+    fun getBookById(bookId: String, userId: Int) = flow {
         val response = RetrofitBuilder.pimApiService.getBookById(bookId, userId)
             .body() as BookModel
         emit(response)
     }
 
-    fun addBookRating(userId: Int, bookId: String, bookName: String, rating: Float) = flow{
+    fun addBookRating(userId: Int, bookId: String, bookName: String, rating: Float) = flow {
         val response = RetrofitBuilder.pimApiService.addBookRating(userId, bookId, bookName, rating)
         emit(response.code())
     }

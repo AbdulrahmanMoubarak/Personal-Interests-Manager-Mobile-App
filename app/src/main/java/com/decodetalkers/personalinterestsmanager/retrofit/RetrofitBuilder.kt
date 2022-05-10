@@ -1,8 +1,5 @@
 package com.decodetalkers.personalinterestsmanager.retrofit
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -13,8 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitBuilder {
 
-    private const val PERSONAL_INTERESTS_MANAGER_SERVER_URL = "http://192.168.1.7:5001/"
-    //private const val PERSONAL_INTERESTS_MANAGER_SERVER_URL = "https://cc59-41-129-61-49.ngrok.io"
+    private const val PERSONAL_INTERESTS_MANAGER_SERVER_URL = "https://hobbitor.herokuapp.com/"
 
     private fun getRetrofit(url: String): Retrofit {
         return Retrofit.Builder()

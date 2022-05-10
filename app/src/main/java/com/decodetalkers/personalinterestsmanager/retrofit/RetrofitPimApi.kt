@@ -4,6 +4,7 @@ import com.decodetalkers.personalinterestsmanager.models.*
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
+import java.util.*
 
 interface RetrofitPimApi {
 
@@ -98,4 +99,17 @@ interface RetrofitPimApi {
     suspend fun getBookBasedRecommendation(
         @Query("bookId")bookId: String
     ): Response<List<SectionModel>>
+
+    @GET("/movies/main/sections")
+    suspend fun getMoviesSectionNames(
+        @Query("userId") userId: Int
+    ): Response<List<MutableMap<String, String>>>
+
+    @GET("/movies/main/sections/content")
+    suspend fun getSectionContent(
+        @Query("name") sectionName: String,
+        @Query("userId") userId: Int? = null,
+        @Query("year") year: Int? = null,
+        @Query("genre") genre: Int? = null,
+    ): Response<List<MediaItemOfListModel>>
 }

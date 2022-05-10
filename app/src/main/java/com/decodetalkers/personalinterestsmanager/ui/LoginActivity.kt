@@ -14,11 +14,9 @@ import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_music.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.flow
 
 class LoginActivity : AppCompatActivity() {
 
@@ -50,16 +48,17 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(this)
             }
         }
+        loadSomething()
     }
 
     override fun onStart() {
         super.onStart()
-        loadMoviesData()
+
     }
 
-    private fun loadMoviesData() {
+    private fun loadSomething() {
         CoroutineScope(Dispatchers.IO).launch {
-            homeScreensVM.getMoviesHomePage(AppUser.user_id, false).collect {
+            fakeLoad().collect {
                 isLoadingMoviesFinished = true
                 if(checkAllLoadingFinished()){
                     withContext(Dispatchers.Main){
@@ -70,23 +69,27 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun fakeLoad() = flow{
+        delay(2000)
+        emit(true)
+    }
+
     private fun checkAllLoadingFinished(): Boolean{
         return (isLoadingMoviesFinished)
     }
 
     private fun onLoadingFinished() {
-        bookITextView.visibility = View.GONE
         loadingProgressBar.visibility = View.GONE
-        bookIconImageView.setImageResource(R.drawable.ic_all_colored)
+        bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2)
         startAnimation()
     }
 
     private fun startAnimation() {
         bookIconImageView.animate().apply {
-            rotationBy(360f)
-            x(5f)
-            y(10f)
-            duration = 1000
+            scaleXBy(0.3f)
+            scaleYBy(0.3f)
+            translationYBy(-600f)
+            duration = 300
         }.setListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(p0: Animator?) {
 

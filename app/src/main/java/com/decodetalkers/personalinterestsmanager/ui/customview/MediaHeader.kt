@@ -90,6 +90,7 @@ class MediaHeader @JvmOverloads constructor(
         if(!isSearchView){
             searchCard.visibility = View.VISIBLE
             titleCard.visibility = View.GONE
+            header_searchView.requestFocus()
             val imm: InputMethodManager? =
                 context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
             imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)

@@ -57,15 +57,19 @@ class BooksFragment : Fragment() {
 
     private fun loadSections(reload: Boolean) {
         try {
-            UiManager().setProgressBarState(books_progress, true)
+            try {
+                UiManager().setProgressBarState(books_progress, true)
+            } catch (e: Exception) {
+            }
             cJob = CoroutineScope(Dispatchers.IO).launch {
                 homeScreensVM.getBooksHomePage(AppUser.user_id, reload).collect {
                     withContext(Dispatchers.Main) {
                         try {
-                            UiManager().setProgressBarState(books_progress, false)
-                            it?.let {
-                                setRecyclerList(it)
+                            try {
+                                UiManager().setProgressBarState(books_progress, false)
+                            } catch (e: Exception) {
                             }
+                            setRecyclerList(it)
                         } catch (e: Exception) {
 
                         }
@@ -99,12 +103,16 @@ class BooksFragment : Fragment() {
     ) {
         UiManager().setProgressBarState(books_progress, true)
         CoroutineScope(Dispatchers.IO).launch {
-            homeScreensVM.getBookById(bookId, AppUser.user_id).collect{
+            homeScreensVM.getBookById(bookId, AppUser.user_id).collect {
                 withContext(Dispatchers.Main) {
                     UiManager().setProgressBarState(books_progress, false)
                     val intent = Intent(requireContext(), BookDetailActivity::class.java)
                     intent.putExtra("book_model", it)
-                    val actOptions = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), bookImageView, "SharedPoster")
+                    val actOptions = ActivityOptions.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        bookImageView,
+                        "SharedPoster"
+                    )
                     startActivity(intent, actOptions.toBundle())
                 }
             }

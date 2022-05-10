@@ -28,6 +28,7 @@ import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayer.PlaybackEventListener
+import com.google.android.youtube.player.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import kotlinx.android.synthetic.main.activity_search_result.*
 import kotlinx.android.synthetic.main.activity_song_detail.*
@@ -41,6 +42,8 @@ class SongDetailActivity : YouTubeBaseActivity() {
 
     private lateinit var mSong: SongModel
     private var sectionRecyclerAdapter = SectionRecycler(::loadSongDetailsForActivity)
+    private lateinit var mYoutubePlayer: YouTubePlayer
+    private var curYtPos = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,17 +56,14 @@ class SongDetailActivity : YouTubeBaseActivity() {
         }
 
         initViews()
-
     }
 
     private fun initViews() {
         mSong = intent.getSerializableExtra("song_model") as SongModel
         song_detail_title.text = mSong.title
         song_detail_image.load(mSong.image)
-        initYoutubePlayer(mSong.youtube_id)
         loadSongRecommendation(mSong.song_spotify_id)
-        music_detail_yt_player.onFocusChangeListener = null
-
+        initYoutubePlayer(mSong.youtube_id)
         btnSpotify.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(mSong.spotify_link)
@@ -71,15 +71,31 @@ class SongDetailActivity : YouTubeBaseActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        try {
+            curYtPos = mYoutubePlayer.currentTimeMillis
+        }catch (e: Exception){}
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initYoutubePlayer(mSong.youtube_id)
+    }
+
     private fun initYoutubePlayer(songYtId: String) {
-        music_detail_yt_player.initialize(
+        val ytPlayer: YouTubePlayerView = findViewById(R.id.music_detail_yt_player)
+        ytPlayer.initialize(
             "AIzaSyAQ0EfQEVuNuRn44SP6s6QTj-bU8WEDHuo",
             object : YouTubePlayer.OnInitializedListener {
                 override fun onInitializationSuccess(
                     provider: YouTubePlayer.Provider,
                     youTubePlayer: YouTubePlayer, b: Boolean
                 ) {
+                    mYoutubePlayer = youTubePlayer
                     youTubePlayer.loadVideo(songYtId)
+                    youTubePlayer.seekToMillis(curYtPos)
                     youTubePlayer.play()
                     youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL)
                     music_detail_miniplayer.subscribeYoutubePlayer(youTubePlayer)
@@ -94,7 +110,7 @@ class SongDetailActivity : YouTubeBaseActivity() {
                     provider: YouTubePlayer.Provider,
                     youTubeInitializationResult: YouTubeInitializationResult
                 ) {
-                    Toast.makeText(applicationContext, "Video player failed to start", Toast.LENGTH_SHORT)
+                    Toast.makeText(applicationContext, youTubeInitializationResult.name, Toast.LENGTH_SHORT)
                         .show()
                 }
             }
@@ -147,6 +163,8 @@ class SongDetailActivity : YouTubeBaseActivity() {
                         UiManager().setProgressBarState(song_detail_progress, false)
                         val intent = Intent(this@SongDetailActivity, SongDetailActivity::class.java)
                         intent.putExtra("song_model", it)
+                        curYtPos = mYoutubePlayer.currentTimeMillis
+                        mYoutubePlayer.release()
                         val actOptions = ActivityOptions.makeSceneTransitionAnimation(
                             this@SongDetailActivity,
                             songImageView,

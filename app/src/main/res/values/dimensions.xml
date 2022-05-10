@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mediaHeaderTextSize">30sp</dimen>
+    <dimen name="mediaHeaderImageSize">30dp</dimen>
+    <dimen name="SectionTextSize">20sp</dimen>
+    <dimen name="PlayButtonSize">40dp</dimen>
+    <dimen name="mediaItemTextSize">12sp</dimen>
+    <dimen name="cardTitleTextSize">17sp</dimen>
+    <dimen name="searchResultTxtSize">25sp</dimen>
+</resources>
