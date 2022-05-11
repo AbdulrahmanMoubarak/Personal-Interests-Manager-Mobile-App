@@ -205,5 +205,4 @@ class SongDetailActivity : YouTubeBaseActivity() {
             }
         }
     }
-
 }

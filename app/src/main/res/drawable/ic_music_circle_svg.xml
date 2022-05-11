@@ -5,10 +5,10 @@
     android:viewportHeight="512">
   <path
       android:pathData="M256,256m-256,0a256,256 0,1 1,512 0a256,256 0,1 1,-512 0"
-      android:fillColor="#504AEF"/>
+      android:fillColor="?attr/MediaCircle"/>
   <path
       android:pathData="M512,256c0,-10.352 -0.631,-20.554 -1.826,-30.584l-83.508,-83.194l-8.045,6.21L398.222,128L85.333,369.778l140.819,140.481C235.946,511.397 245.901,512 256,512C397.384,512 512,397.384 512,256z"
-      android:fillColor="#413BDD"/>
+      android:fillColor="?attr/MediaCircleShade"/>
   <path
       android:pathData="M85.333,142.222h341.333v227.556h-341.333z"
       android:fillColor="#273B7A"/>

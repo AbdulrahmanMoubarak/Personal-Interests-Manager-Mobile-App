@@ -81,11 +81,6 @@ class BooksFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        cJob.cancel()
-    }
-
     private fun setRecyclerList(list: List<SectionModel>) {
         sectionRecyclerAdapter.setItem_List(list)
         books_section_recycler.apply {

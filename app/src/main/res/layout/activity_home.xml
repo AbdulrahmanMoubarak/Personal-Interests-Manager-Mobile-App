@@ -4,17 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.HomeActivity">
+    tools:context=".ui.HomeActivity"
+    android:background="?attr/MainScreenBg">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homeBottomNavigationMenu"
-        android:background="#ffffff"
+        android:background="?attr/BottomMenuBgColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:itemTextColor="?attr/BottomMenuTextColor"
         app:menu="@menu/home_bottom_menu"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.2"
+        android:src="@drawable/ic_logo_h_orangeicon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <fragment
@@ -35,7 +48,7 @@
         android:layout_margin="29dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="64dp"
-        android:backgroundTint="#00f"
+        android:backgroundTint="?attr/loginButtonColor"
         android:contentDescription="@string/chatbot"
         android:src="@drawable/ic_chatbot_svgrepo_com"
         android:tint="@color/white"

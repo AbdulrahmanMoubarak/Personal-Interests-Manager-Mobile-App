@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.BookDetailActivity">
+    tools:context=".ui.BookDetailActivity"
+    android:background="?MainScreenBg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,7 +36,7 @@
             android:layout_margin="8dp"
             android:text="book name"
             android:textAlignment="viewStart"
-            android:textColor="@color/black"
+            android:textColor="?HeaderText"
             android:textSize="@dimen/SectionTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/book_detail_image_card"
@@ -45,6 +46,7 @@
             app:layout_constraintVertical_bias="0.207" />
 
         <TextView
+            android:textColor="?inputTextColor"
             android:id="@+id/book_detail_authors"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -99,9 +101,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="?CardBg">
 
                 <TextView
+                    android:textColor="?inputTextColor"
                     android:id="@+id/book_detail_desc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -119,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="@string/Overview"
-                    android:textColor="@color/black"
+                    android:textColor="?HeaderText"
                     android:textSize="@dimen/cardTitleTextSize"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +146,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="?CardBg">
 
                 <TextView
                     android:id="@+id/txtCategories"
@@ -150,13 +155,14 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="@string/Categories"
-                    android:textColor="@color/black"
+                    android:textColor="?HeaderText"
                     android:textSize="@dimen/cardTitleTextSize"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:textColor="?inputTextColor"
                     android:id="@+id/book_detail_cat"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

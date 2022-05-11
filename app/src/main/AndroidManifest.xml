@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_logo_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PersonalInterestsManager"
+        android:theme="@style/Theme.PersonalInterestsManagerDark"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
@@ -31,12 +31,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.SongDetailActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.util.SongDetailActivity"
             android:exported="true"
             android:label="@string/title_activity_song_detail"
-            android:theme="@style/Theme.PersonalInterestsManager.NoActionBar" />
+            />
         <activity
             android:name=".ui.MovieDetailActivity"
             android:exported="true" />

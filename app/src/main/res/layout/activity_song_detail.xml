@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.SongDetailActivity">
+    tools:context=".ui.SongDetailActivity"
+    android:background="?MainScreenBg">
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:transitionName="ytPlayer"
@@ -87,7 +88,7 @@
                 android:maxLines="3"
                 android:text="Song Name"
                 android:textAlignment="viewStart"
-                android:textColor="@color/black"
+                android:textColor="?HeaderText"
                 android:textSize="@dimen/SectionTextSize"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +122,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="116dp">
+                    android:layout_height="116dp"
+                    android:background="?CardBg">
 
                     <TextView
                         android:id="@+id/song_txtLinks"
@@ -129,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:text="@string/Links"
-                        android:textColor="@color/black"
+                        android:textColor="?HeaderText"
                         android:textSize="@dimen/cardTitleTextSize"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"

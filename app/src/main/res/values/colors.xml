@@ -3,10 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#B9BBBD</color>
-    <color name="colorBackground">#ffffff</color>
+    <color name="colorWhite">#ffffff</color>
     <color name="colorSplashText">#000000</color>
-    <color name="colorProgressBar">#FFCE511C</color>
-    <color name="colorTextView">#83898E</color>
+    <color name="colorDarkOrange">#FFCE511C</color>
+    <color name="colorGray">#83898E</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>

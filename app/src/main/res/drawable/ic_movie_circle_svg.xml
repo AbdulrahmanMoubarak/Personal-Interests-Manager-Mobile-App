@@ -5,14 +5,13 @@
     android:viewportHeight="505">
   <path
       android:pathData="M252.5,252.5m-252.5,0a252.5,252.5 0,1 1,505 0a252.5,252.5 0,1 1,-505 0"
-      android:fillColor="#504AEF"/>
+      android:fillColor="?attr/MediaCircle"/>
   <path
       android:pathData="M503.717,248.932C503.717,238.58 503.086,228.378 501.891,218.348L407.772,120.634L410.338,141.364L389.939,120.932L92.129,380.581L217.869,503.191C227.663,504.329 237.618,504.932 247.717,504.932C389.101,504.932 503.717,390.316 503.717,248.932Z"
-      android:fillColor="#413BDD"/>
+      android:fillColor="?attr/MediaCircleShade"/>
   <path
       android:pathData="M395.3,113.6H109.7c-10.8,0 -19.5,8.7 -19.5,19.5V372c0,10.8 8.7,19.5 19.5,19.5h285.6c10.8,0 19.5,-8.7 19.5,-19.5V133C414.8,122.3 406.1,113.6 395.3,113.6z"
-      android:fillColor="#324A5E"
-      android:fillType="nonZero"/>
+      android:fillColor="#324A5E" />
   <path
       android:pathData="M389.3,312H115.7c-0.5,0 -0.9,-0.4 -0.9,-0.9V193.9c0,-0.5 0.4,-0.9 0.9,-0.9h273.6c0.5,0 0.9,0.4 0.9,0.9v117.3C390.2,311.6 389.8,312 389.3,312z"
       android:fillColor="#FFFFFF"/>

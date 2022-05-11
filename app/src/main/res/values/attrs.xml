@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorSplashScreenBg" format="color" />
+    <attr name="colorProgress" format="color" />
+    <attr name="inputTextColor" format="color" />
+    <attr name="hintTextColor" format="color" />
+    <attr name="loginButtonColor" format="color" />
+    <attr name="loginButtonTextColor" format="color" />
+    <attr name="BottomMenuBgColor" format="color" />
+    <attr name="BottomMenuTextColor" format="color" />
+    <attr name="MainScreenBg" format="color" />
+    <attr name="HeaderBg" format="color" />
+    <attr name="HeaderText" format="color" />
+    <attr name="HeaderIcons" format="color" />
+    <attr name="MusicMiniPlayerColor" format="color" />
+    <attr name="MusicMiniPlayerButtonColor" format="color" />
+    <attr name="LogoColor" format="color" />
+    <attr name="MediaCircle" format="color" />
+    <attr name="MediaCircleShade" format="color" />
+    <attr name="MovieBottomMenu" format="color" />
+    <attr name="BookBottmMenu" format="color" />
+    <attr name="MusicBottomMenu" format="color" />
+    <attr name="LibraryBottomMenu" format="color" />
+    <attr name="CardBg" format="color" />
+</resources>

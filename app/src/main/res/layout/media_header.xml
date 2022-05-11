@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
+
         android:visibility="visible"
         android:id="@+id/titleCard"
         app:cardElevation="5dp"
@@ -17,11 +18,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="?attr/HeaderBg"
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/imageView"
                 android:layout_width="@dimen/mediaHeaderImageSize"
                 android:layout_height="@dimen/mediaHeaderImageSize"
@@ -38,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:text="@string/movies"
-                android:textColor="#000000"
+                android:textColor="?attr/HeaderText"
                 android:textSize="@dimen/mediaHeaderTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +62,7 @@
                 app:layout_constraintVertical_bias="0.615" />
 
             <ImageView
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/header_profile"
                 android:layout_width="@dimen/mediaHeaderImageSize"
                 android:layout_height="@dimen/mediaHeaderImageSize"
@@ -87,10 +90,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="?attr/HeaderBg"
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.SearchView
+
                 android:id="@+id/header_searchView"
+                android:theme="@style/AppTheme.Toolbar"
                 app:queryHint="@string/search"
                 android:layout_margin="6dp"
                 android:layout_width="0dp"

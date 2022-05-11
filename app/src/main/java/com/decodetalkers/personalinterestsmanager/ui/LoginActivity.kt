@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun onLoadingFinished() {
         loadingProgressBar.visibility = View.GONE
-        bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2)
+        bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2_orange)
         startAnimation()
     }
 

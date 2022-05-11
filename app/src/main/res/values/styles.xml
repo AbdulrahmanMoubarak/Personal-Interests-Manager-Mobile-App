@@ -8,8 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ProgressBarStyle">
+    <style name="ProgressBarStyle" parent="Theme.PersonalInterestsManagerPrimary">
         <item name="colorAccent">#f00</item>
+    </style>
+
+    <style name="ProgressBarStyleDark" parent="Theme.PersonalInterestsManagerDark">
+        <item name="colorAccent">#ff0</item>
     </style>
 
 </resources>

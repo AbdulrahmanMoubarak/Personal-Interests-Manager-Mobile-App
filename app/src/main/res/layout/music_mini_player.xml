@@ -17,7 +17,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary">
+            android:background="?attr/MusicMiniPlayerColor">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/mini_player_play_pause"
