@@ -58,10 +58,6 @@ class MoviesFragment : Fragment() {
         loadSectionsAsync(false)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     private fun loadSectionsAsync(reload: Boolean) {
         UiManager().setProgressBarState(MoviesloadingProgressBar, true)
         if (HomeScreensViewModel.isMoviesLoaded && !reload) {
@@ -72,7 +68,9 @@ class MoviesFragment : Fragment() {
                     homeScreensVM.getMoviesHomePageResultsAsync(AppUser.user_id, reload).collect {
                         withContext(Dispatchers.Main) {
                             try {
-                                sectionRecyclerAdapter.addSectionItem(it)
+                                if(it.section_mediaItems.size > 0) {
+                                    sectionRecyclerAdapter.addSectionItem(it)
+                                }
                                 Log.d("MoviesFragment", "loadSectionsAsync: ${it.section_name} loaded")
                                 UiManager().setProgressBarState(MoviesloadingProgressBar, false)
                                 UiManager().setProgressBarState(movies_progress, false)

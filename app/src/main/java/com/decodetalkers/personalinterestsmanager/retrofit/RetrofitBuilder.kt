@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitBuilder {
 
     private const val PERSONAL_INTERESTS_MANAGER_SERVER_URL = "https://hobbitor.herokuapp.com/"
+    //private const val PERSONAL_INTERESTS_MANAGER_SERVER_URL = "http://192.168.222.189:5001/"
 
     private fun getRetrofit(url: String): Retrofit {
         return Retrofit.Builder()

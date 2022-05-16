@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.SelectFavouritesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.BookDetailActivity"
             android:exported="false" />
         <activity
@@ -32,8 +35,7 @@
         <activity
             android:name=".ui.SongDetailActivity"
             android:exported="true"
-            android:label="@string/title_activity_song_detail"
-            />
+            android:label="@string/title_activity_song_detail" />
         <activity
             android:name=".ui.MovieDetailActivity"
             android:exported="true" />

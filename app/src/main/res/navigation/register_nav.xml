@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/register_nav"
+    app:startDestination="@id/chooseMusicFavFragment">
+
+    <fragment
+        android:id="@+id/chooseMusicFavFragment"
+        android:name="com.decodetalkers.personalinterestsmanager.ui.ChooseMusicFavFragment"
+        android:label="fragment_choose_music_fav"
+        tools:layout="@layout/fragment_choose_music_fav" >
+        <action
+            android:id="@+id/action_chooseMusicFavFragment_to_chooseMusicGenresFragment"
+            app:destination="@id/chooseMusicGenresFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseMusicGenresFragment"
+        android:name="com.decodetalkers.personalinterestsmanager.ui.ChooseMusicGenresFragment"
+        android:label="fragment_choose_music_genres_fav"
+        tools:layout="@layout/fragment_choose_music_genres_fav" />
+</navigation>

@@ -22,4 +22,5 @@
     <attr name="MusicBottomMenu" format="color" />
     <attr name="LibraryBottomMenu" format="color" />
     <attr name="CardBg" format="color" />
+    <attr name="CardSelectedBg" format="color" />
 </resources>

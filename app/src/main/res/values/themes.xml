@@ -30,6 +30,7 @@
         <item name="MusicBottomMenu">#273B7A</item>
         <item name="LibraryBottomMenu">#DDA27A</item>
         <item name="CardBg">@color/white</item>
+        <item name="CardSelectedBg">#00a000</item>
 
 
 
@@ -47,7 +48,7 @@
 
 
         <item name="colorSplashScreenBg">@color/black</item>
-        <item name="colorProgress">#f00</item>
+        <item name="colorProgress">#FF8D00</item>
         <item name="inputTextColor">#fff</item>
         <item name="hintTextColor">#fff</item>
         <item name="loginButtonColor">#FF8D00</item>
@@ -68,6 +69,7 @@
         <item name="MusicBottomMenu">#FF6D00</item>
         <item name="LibraryBottomMenu">#FF6D00</item>
         <item name="CardBg">#444</item>
+        <item name="CardSelectedBg">#00a000</item>
 
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>

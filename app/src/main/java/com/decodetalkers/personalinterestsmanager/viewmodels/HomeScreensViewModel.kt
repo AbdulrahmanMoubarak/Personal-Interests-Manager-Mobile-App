@@ -6,6 +6,8 @@ import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.*
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
 import com.decodetalkers.personalinterestsmanager.roomdb.PimBackupDatabase
+import com.decodetalkers.personalinterestsmanager.ui.adapters.FavArtistAdapter
+import com.decodetalkers.personalinterestsmanager.util.StringHasherSHA256
 import com.decodetalkers.radioalarm.application.MainApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +33,31 @@ class HomeScreensViewModel : ViewModel() {
     }
 
     private val databaseInstance = PimBackupDatabase.getInstance(MainApplication.getAppContext())
+
+    fun registerUser(email:String, name: String, password:String) = flow{
+        val hasedPass = StringHasherSHA256().hashItem(password)
+        val response = RetrofitBuilder.pimApiService.registerUser(name, email, hasedPass)
+        emit(response.code())
+    }
+
+    fun login(email: String, password: String) = flow{
+        val hasedPass = StringHasherSHA256().hashItem(password)
+        val response = RetrofitBuilder.pimApiService.login(email, hasedPass)
+        if(response.code() == 200) {
+            emit(response.body() as UserModel)
+        } else{
+            emit(false)
+        }
+    }
+
+    fun registerUserPrefs(email: String, favArtist: String, favGenres:String)= flow{
+        val response = RetrofitBuilder.pimApiService.registerUserPrefs(email, favArtist, favGenres)
+        if(response.code() == 200) {
+            emit(true)
+        } else{
+            emit(false)
+        }
+    }
 
     fun getMoviesSearchResults(name: String) = flow {
         val response = RetrofitBuilder.pimApiService.getMoviesSearchResults(name)
@@ -75,14 +102,14 @@ class HomeScreensViewModel : ViewModel() {
     }
 
     fun getMoviesHomePageResultsAsync(userId: Int, reload: Boolean) = flow {
-        isMoviesLoaded=false
+        isMoviesLoaded = false
         val sectionLines = RetrofitBuilder.pimApiService.getMoviesSectionNames(userId)
             .body() as List<MutableMap<String, String>>
         var i = 0
         for (item in sectionLines) {
             item["seq"] = i.toString()
             getMovieSectionItems(item).collect {
-                emit(SectionModel(item["name"]!!,it).apply {
+                emit(SectionModel(item["name"]!!, it).apply {
                     order = item["seq"]!!.toInt()
                 })
             }
@@ -90,7 +117,7 @@ class HomeScreensViewModel : ViewModel() {
         }
     }
 
-    private fun getSectionItems(secList: List<Map<String, String>>) = flow{
+    private fun getSectionItems(secList: List<Map<String, String>>) = flow {
         try {
             CoroutineScope(Dispatchers.IO).launch {
                 for (section in secList) {
@@ -104,14 +131,21 @@ class HomeScreensViewModel : ViewModel() {
         }
     }
 
-    fun getMovieSectionItems(section: Map<String, String>) = flow{
+    fun getMovieSectionItems(section: Map<String, String>) = flow {
         val name = section["name"]!!.replace(' ', '+')
         val userId = if (section["userId"] != null) section["userId"] else null
         val year = if (section["year"] != null) section["year"] else null
         val genre = if (section["genre"] != null) section["genre"] else null
-        val response = RetrofitBuilder.pimApiService.getSectionContent(name, userId?.toInt(), year?.toInt(), genre?.toInt())
+        val response = RetrofitBuilder.pimApiService.getSectionContent(
+            name,
+            userId?.toInt(),
+            year?.toInt(),
+            genre?.toInt()
+        )
             .body() as List<MediaItemOfListModel>
-        moviesSections.add(SectionModel(section["name"]!!,response))
+        if(response.size > 0) {
+            moviesSections.add(SectionModel(section["name"]!!, response))
+        }
         isMoviesLoaded = true
         emit(response)
     }
@@ -181,7 +215,7 @@ class HomeScreensViewModel : ViewModel() {
                     "Check Your Internet Connection",
                     Toast.LENGTH_SHORT
                 ).show()
-            }catch (e: Exception){
+            } catch (e: Exception) {
 
             }
         }
@@ -220,6 +254,18 @@ class HomeScreensViewModel : ViewModel() {
         } catch (e: Exception) {
             emit(false)
         }
+    }
+
+    fun getTopMusicArtists() = flow {
+        val response = RetrofitBuilder.pimApiService.getMusicTopArtists()
+            .body() as List<MediaItemOfListModel>
+        emit(response)
+    }
+
+    fun getMusicGenres() = flow {
+        val response = RetrofitBuilder.pimApiService.getMusicGenres()
+            .body() as List<GenreModel>
+        emit(response)
     }
 
 }

@@ -3,7 +3,6 @@ package com.decodetalkers.personalinterestsmanager.models
 import com.google.gson.annotations.SerializedName
 
 data class MediaItemOfListModel(
-
     @SerializedName("item_id")
     var item_id: String,
     @SerializedName("item_name")
@@ -13,5 +12,5 @@ data class MediaItemOfListModel(
     @SerializedName("type")
     var item_type: String
 ){
-
+    var selected = false
 }

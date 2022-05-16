@@ -41,4 +41,11 @@
     <string name="cancel">Cancel</string>
     <string name="Categories">Categories</string>
     <string name="Links">External Links</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="username">Username</string>
+    <string name="register">Register</string>
+    <string name="proceed">Proceed</string>
+    <string name="choose_fav_artist">Choose Your Favourite Song Artists</string>
+    <string name="choose_fav_genres">Choose Your Favourite Music Genres</string>
+    <string name="finish">Finish</string>
 </resources>

@@ -8,15 +8,21 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
+import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
+import com.decodetalkers.personalinterestsmanager.models.UserModel
+import com.decodetalkers.personalinterestsmanager.ui.util.FormValidator
+import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_music.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,31 +43,147 @@ class LoginActivity : AppCompatActivity() {
             window.statusBarColor = getColor(R.color.black)
         }
 
-        AppUser.setUserData(2018170873, "AbdulRahman Moubarak", "oddaled@gmail.com")
+        //AppUser.setUserData(2018170873, "AbdulRahman Moubarak", "oddaled@gmail.com")
 
         homeScreensVM =
             ViewModelProvider(this).get(HomeScreensViewModel::class.java)
 
         loginButton.setOnClickListener {
-            Intent(this, HomeActivity::class.java).apply {
-                finish()
-                startActivity(this)
+            if (FormValidator().validateLogin(
+                    emailEditText.text.toString(),
+                    passwordEditText.text.toString()
+                )
+            ) {
+                validateEmailRemotely()
+            } else {
+                Toast.makeText(
+                    this@LoginActivity,
+                    "You have to enter proper data",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        }
+
+        registerButton.setOnClickListener {
+            if (FormValidator().validateRegisteration(
+                    emailRegEditText.text.toString(),
+                    usernameRegEditText.text.toString(),
+                    passwordRegEditText.text.toString(),
+                    passwordConfirmRegEditText.text.toString()
+                )
+            ) {
+                registerUserRemotely()
+            } else {
+                Toast.makeText(
+                    this@LoginActivity,
+                    "You have to enter proper data",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+
+        registerFrame.setOnClickListener {
+            registerView.visibility = View.VISIBLE
+            afterAnimationView.visibility = View.GONE
+
+        }
+        loginFrame.setOnClickListener {
+            afterAnimationView.visibility = View.VISIBLE
+            registerView.visibility = View.GONE
+
+        }
+
         loadSomething()
     }
 
     override fun onStart() {
         super.onStart()
+    }
 
+    private fun validateEmailRemotely() {
+        UiManager().setProgressBarState(login_progress, true)
+        CoroutineScope(Dispatchers.IO).launch {
+            homeScreensVM.login(
+                emailEditText.text.toString(),
+                passwordEditText.text.toString(),
+            ).collect {
+                try {
+                    val user = it as UserModel
+                    AppUser.setUserData(user.user_id.toInt(), user.user_name, user.user_email)
+                    withContext(Dispatchers.Main) {
+                        UiManager().setProgressBarState(login_progress, false)
+                        SharedPreferencesManager().setUserLogin(
+                            AppUser.user_id,
+                            AppUser.user_name,
+                            AppUser.user_email,
+                            "Complete"
+                        )
+                        Intent(this@LoginActivity, HomeActivity::class.java).apply {
+                            startActivity(this)
+                            finish()
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        UiManager().setProgressBarState(login_progress, false)
+                        Toast.makeText(this@LoginActivity, "Invalid Data", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun registerUserRemotely() {
+        UiManager().setProgressBarState(login_progress, true)
+        CoroutineScope(Dispatchers.IO).launch {
+            homeScreensVM.registerUser(
+                emailRegEditText.text.toString(),
+                usernameRegEditText.text.toString(),
+                passwordRegEditText.text.toString(),
+            ).collect {
+                if (it == 200) {
+                    homeScreensVM.login(
+                        emailRegEditText.text.toString(),
+                        passwordRegEditText.text.toString(),
+                    ).collect {
+                        val user = it as UserModel
+                        AppUser.setUserData(user.user_id.toInt(), user.user_name, user.user_email)
+                        withContext(Dispatchers.Main) {
+                            UiManager().setProgressBarState(login_progress, false)
+                            SharedPreferencesManager().setUserLogin(
+                                AppUser.user_id,
+                                AppUser.user_name,
+                                AppUser.user_email,
+                                "notComplete"
+                            )
+                            Intent(this@LoginActivity, SelectFavouritesActivity::class.java).apply {
+                                startActivity(this)
+                                finish()
+                            }
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        UiManager().setProgressBarState(login_progress, false)
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Email already exists",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun loadSomething() {
         CoroutineScope(Dispatchers.IO).launch {
             fakeLoad().collect {
                 isLoadingMoviesFinished = true
-                if(checkAllLoadingFinished()){
-                    withContext(Dispatchers.Main){
+                if (checkAllLoadingFinished()) {
+                    withContext(Dispatchers.Main) {
                         onLoadingFinished()
                     }
                 }
@@ -69,20 +191,37 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun fakeLoad() = flow{
+    private fun fakeLoad() = flow {
         delay(2000)
         emit(true)
     }
 
-    private fun checkAllLoadingFinished(): Boolean{
+    private fun checkAllLoadingFinished(): Boolean {
         return (isLoadingMoviesFinished)
     }
 
     private fun onLoadingFinished() {
         loadingProgressBar.visibility = View.GONE
         bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2_orange)
-        startAnimation()
+        if(SharedPreferencesManager().isUserLoggedIn()){
+            val user = SharedPreferencesManager().getUser()
+            AppUser.setUserData(user.user_id.toInt(), user.user_name, user.user_email)
+            if(SharedPreferencesManager().isUserStateComplete()) {
+                Intent(this@LoginActivity, HomeActivity::class.java).apply {
+                    startActivity(this)
+                    finish()
+                }
+            } else {
+                Intent(this@LoginActivity, SelectFavouritesActivity::class.java).apply {
+                    startActivity(this)
+                    finish()
+                }
+            }
+        } else {
+            startAnimation()
+        }
     }
+
 
     private fun startAnimation() {
         bookIconImageView.animate().apply {
@@ -107,7 +246,5 @@ class LoginActivity : AppCompatActivity() {
 
             }
         })
-
-
     }
 }

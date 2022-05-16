@@ -8,6 +8,29 @@ import java.util.*
 
 interface RetrofitPimApi {
 
+    @FormUrlEncoded
+    @POST("/register")
+    suspend fun registerUser(
+        @Field("userName") userName: String,
+        @Field("email") email: String,
+        @Field("password") password: String,
+    ): Response<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/register/preferences")
+    suspend fun registerUserPrefs(
+        @Field("email") email: String,
+        @Field("favArtists") favArtists: String,
+        @Field("favGenres") favGenres: String,
+    ): Response<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/login")
+    suspend fun login(
+        @Field("email") email: String,
+        @Field("password") password: String,
+    ): Response<UserModel>
+
     @GET("/movies/search")
     suspend fun getMoviesSearchResults(
         @Query("name") name :String
@@ -112,4 +135,10 @@ interface RetrofitPimApi {
         @Query("year") year: Int? = null,
         @Query("genre") genre: Int? = null,
     ): Response<List<MediaItemOfListModel>>
+
+    @GET("/music/top-artists")
+    suspend fun getMusicTopArtists():Response<List<MediaItemOfListModel>>
+
+    @GET("/music/genres")
+    suspend fun getMusicGenres():Response<List<GenreModel>>
 }

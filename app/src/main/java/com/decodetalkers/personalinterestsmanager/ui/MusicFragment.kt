@@ -65,7 +65,7 @@ class MusicFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     UiManager().setProgressBarState(music_progress, false)
                     try {
-                        it?.let {
+                        it.let {
                             setRecyclerList(it)
                         }
                     }catch (e:Exception){
