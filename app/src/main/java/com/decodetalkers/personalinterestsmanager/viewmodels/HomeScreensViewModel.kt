@@ -6,12 +6,10 @@ import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.*
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
 import com.decodetalkers.personalinterestsmanager.roomdb.PimBackupDatabase
-import com.decodetalkers.personalinterestsmanager.ui.adapters.FavArtistAdapter
-import com.decodetalkers.personalinterestsmanager.util.StringHasherSHA256
+import com.decodetalkers.personalinterestsmanager.globalutils.StringHasherSHA256
 import com.decodetalkers.radioalarm.application.MainApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -34,29 +32,65 @@ class HomeScreensViewModel : ViewModel() {
 
     private val databaseInstance = PimBackupDatabase.getInstance(MainApplication.getAppContext())
 
-    fun registerUser(email:String, name: String, password:String) = flow{
+    fun registerUser(email: String, name: String, password: String) = flow {
         val hasedPass = StringHasherSHA256().hashItem(password)
         val response = RetrofitBuilder.pimApiService.registerUser(name, email, hasedPass)
         emit(response.code())
     }
 
-    fun login(email: String, password: String) = flow{
+    fun login(email: String, password: String) = flow {
         val hasedPass = StringHasherSHA256().hashItem(password)
         val response = RetrofitBuilder.pimApiService.login(email, hasedPass)
-        if(response.code() == 200) {
+        if (response.code() == 200) {
             emit(response.body() as UserModel)
-        } else{
+        } else {
             emit(false)
         }
     }
 
-    fun registerUserPrefs(email: String, favArtist: String, favGenres:String)= flow{
+    fun registerUserPrefs(email: String, favArtist: String, favGenres: String) = flow {
         val response = RetrofitBuilder.pimApiService.registerUserPrefs(email, favArtist, favGenres)
-        if(response.code() == 200) {
+        if (response.code() == 200) {
             emit(true)
-        } else{
+        } else {
             emit(false)
         }
+    }
+
+    fun createPlaylist(userId: Int, playlistName: String, type: String) = flow {
+        val response = RetrofitBuilder.pimApiService.createPlaylist(userId, playlistName, type)
+        if (response.code() == 200) {
+            emit(true)
+        } else {
+            emit(false)
+        }
+    }
+
+    fun addPlaylistItem(playlistId: Int, itemId: String, itemName: String, itemImage: String) =
+        flow {
+            val response = RetrofitBuilder.pimApiService.addPlaylistItem(
+                playlistId,
+                itemId,
+                itemName,
+                itemImage
+            )
+            if (response.code() == 200) {
+                emit(true)
+            } else {
+                emit(false)
+            }
+        }
+
+    fun getAllPlaylists(userId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.getAllPlayLists(userId)
+            .body() as List<MediaItemOfListModel>
+        emit(response)
+    }
+
+    fun loadPlaylistItems(playlistId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.getPlaylistItems(playlistId)
+            .body() as List<MediaItemOfListModel>
+        emit(response)
     }
 
     fun getMoviesSearchResults(name: String) = flow {
@@ -143,7 +177,7 @@ class HomeScreensViewModel : ViewModel() {
             genre?.toInt()
         )
             .body() as List<MediaItemOfListModel>
-        if(response.size > 0) {
+        if (response.size > 0) {
             moviesSections.add(SectionModel(section["name"]!!, response))
         }
         isMoviesLoaded = true

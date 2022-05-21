@@ -1,4 +1,4 @@
-package com.decodetalkers.personalinterestsmanager.util
+package com.decodetalkers.personalinterestsmanager.globalutils
 
 import java.security.MessageDigest
 

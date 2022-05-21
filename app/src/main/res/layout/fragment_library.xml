@@ -4,7 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.LibraryFragment">
+    tools:context=".ui.LibraryFragment"
+    android:background="?attr/MainScreenBg">
+
+    <ProgressBar
+        android:visibility="gone"
+        android:translationZ="90dp"
+        android:id="@+id/library_progress"
+        android:layout_margin="8dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminateDrawable="@drawable/progressbar_style"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
         android:id="@+id/titleCardLibrary"
@@ -13,5 +28,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlists_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/createPlaylistButton"
+        app:layout_constraintTop_toBottomOf="@+id/titleCardLibrary" />
+
+    <Button
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="100dp"
+        android:visibility="visible"
+        android:id="@+id/createPlaylistButton"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:backgroundTint="?attr/loginButtonColor"
+        android:text="@string/create_playlist"
+        android:textAllCaps="false"
+        android:textColor="?attr/loginButtonTextColor"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -95,10 +95,10 @@ class SongDetailActivity : YouTubeBaseActivity() {
                 ) {
                     mYoutubePlayer = youTubePlayer
                     youTubePlayer.loadVideo(songYtId)
-                    youTubePlayer.seekToMillis(curYtPos)
                     youTubePlayer.play()
                     youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL)
                     music_detail_miniplayer.subscribeYoutubePlayer(youTubePlayer)
+                    youTubePlayer.seekToMillis(curYtPos)
                     try {
                         getSongListeningTimesUpdateResult(500)
                     }catch (e: Exception){

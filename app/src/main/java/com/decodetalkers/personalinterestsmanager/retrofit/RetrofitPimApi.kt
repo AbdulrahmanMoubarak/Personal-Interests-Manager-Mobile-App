@@ -31,21 +31,54 @@ interface RetrofitPimApi {
         @Field("password") password: String,
     ): Response<UserModel>
 
+    @FormUrlEncoded
+    @POST("/playlist/create")
+    suspend fun createPlaylist(
+        @Field("userId") userId: Int,
+        @Field("name") name: String,
+        @Field("type") type: String,
+    ): Response<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/playlist/add-item")
+    suspend fun addPlaylistItem(
+        @Field("playlistId") playlistId: Int,
+        @Field("itemId") itemId: String,
+        @Field("itemName") itemName: String,
+        @Field("itemImage") itemImage: String,
+    ): Response<ResponseBody>
+
+    @GET("/playlist/get")
+    suspend fun getAllPlayLists(
+        @Query("userId") userId: Int
+    ): Response<List<MediaItemOfListModel>>
+
+    @GET("/playlist/get")
+    suspend fun getAllPlayListsOfType(
+        @Query("userId") userId: Int,
+        @Query("type") type: Int
+    ): Response<List<MediaItemOfListModel>>
+
+    @GET("/playlist/items")
+    suspend fun getPlaylistItems(
+        @Query("playlistId") playlistId: Int
+    ): Response<List<MediaItemOfListModel>>
+
     @GET("/movies/search")
     suspend fun getMoviesSearchResults(
-        @Query("name") name :String
-    ) : Response<List<MediaItemOfListModel>>
+        @Query("name") name: String
+    ): Response<List<MediaItemOfListModel>>
 
     @GET("/movies/search")
     suspend fun getMovieById(
-        @Query("id") id :Int,
-        @Query("userId") userId :String
-    ) : Response<MovieModel>
+        @Query("id") id: Int,
+        @Query("userId") userId: String
+    ): Response<MovieModel>
 
     @GET("/movies/main")
     suspend fun getMoviesHomeResults(
         @Query("userId") userId: Int
-    ) : Response<List<SectionModel>>
+    ): Response<List<SectionModel>>
 
     @GET("/movies/credits")
     suspend fun getMovieCastById(
@@ -73,7 +106,7 @@ interface RetrofitPimApi {
 
     @GET("/music/search")
     suspend fun getSongById(
-        @Query("id") id :String
+        @Query("id") id: String
     ): Response<SongModel>
 
     @GET("/music/search")
@@ -96,12 +129,12 @@ interface RetrofitPimApi {
     @GET("/books/main")
     suspend fun getBooksHomeResults(
         @Query("userId") userId: Int
-    ) : Response<List<SectionModel>>
+    ): Response<List<SectionModel>>
 
     @GET("/books/search")
     suspend fun getBooksSearchResults(
         @Query("q") query: String
-    ):Response<List<MediaItemOfListModel>>
+    ): Response<List<MediaItemOfListModel>>
 
     @GET("/books/search")
     suspend fun getBookById(
@@ -120,7 +153,7 @@ interface RetrofitPimApi {
 
     @GET("/books/book-based-recommendation")
     suspend fun getBookBasedRecommendation(
-        @Query("bookId")bookId: String
+        @Query("bookId") bookId: String
     ): Response<List<SectionModel>>
 
     @GET("/movies/main/sections")
@@ -137,8 +170,8 @@ interface RetrofitPimApi {
     ): Response<List<MediaItemOfListModel>>
 
     @GET("/music/top-artists")
-    suspend fun getMusicTopArtists():Response<List<MediaItemOfListModel>>
+    suspend fun getMusicTopArtists(): Response<List<MediaItemOfListModel>>
 
     @GET("/music/genres")
-    suspend fun getMusicGenres():Response<List<GenreModel>>
+    suspend fun getMusicGenres(): Response<List<GenreModel>>
 }

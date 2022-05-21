@@ -50,6 +50,17 @@
                 app:layout_constraintVertical_bias="1.0" />
 
             <ImageView
+                android:id="@+id/bookstoresButton"
+                android:visibility="gone"
+                android:layout_width="@dimen/mediaHeaderImageSize"
+                android:layout_height="@dimen/mediaHeaderImageSize"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_bookstore_book_shop_book_publisher_svgrepo_com__1_"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/header_searchIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/header_searchIcon"
                 android:layout_width="@dimen/mediaHeaderImageSize"
                 android:layout_height="@dimen/mediaHeaderImageSize"

@@ -24,6 +24,11 @@ class MediaItemArrayAdapter(
     var mediaItemList: List<MediaItemOfListModel>
 ) : ArrayAdapter<MediaItemOfListModel>(context, 0, mediaItemList) {
 
+
+    fun setItemList(mediaItemList: List<MediaItemOfListModel>){
+        this.mediaItemList = mediaItemList
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var listItemView = convertView
         if(listItemView == null){

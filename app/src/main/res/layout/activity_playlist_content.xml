@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.PlaylistContentActivity"
+    android:background="?attr/MainScreenBg">
+
+    <ProgressBar
+        android:visibility="gone"
+        android:translationZ="90dp"
+        android:id="@+id/content_progress"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminateDrawable="@drawable/progressbar_style"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/palylist_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="playlist"
+        android:textColor="?attr/HeaderIcons"
+        android:textSize="@dimen/mediaHeaderTextSize"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <GridView
+        android:horizontalSpacing="5dp"
+        android:numColumns="2"
+        android:verticalSpacing="3dp"
+        android:id="@+id/playlist_items_recycler"
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/palylist_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,4 +23,5 @@
     <attr name="LibraryBottomMenu" format="color" />
     <attr name="CardBg" format="color" />
     <attr name="CardSelectedBg" format="color" />
+    <attr name="DialogBg" format="color" />
 </resources>

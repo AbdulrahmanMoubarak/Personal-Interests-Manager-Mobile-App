@@ -1,6 +1,5 @@
 package com.decodetalkers.personalinterestsmanager.ui.adapters;
 
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.radioalarm.application.MainApplication
-import java.lang.reflect.Method
 
 
 class FavArtistAdapter(var onClick: (itemId: String) -> Unit) :
@@ -23,7 +21,7 @@ class FavArtistAdapter(var onClick: (itemId: String) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavArtistViewHolder {
         return FavArtistViewHolder(
             LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fav_atrists_adapter, parent, false)
+                .inflate(R.layout.fav_artists_adapter, parent, false)
         )
     }
 

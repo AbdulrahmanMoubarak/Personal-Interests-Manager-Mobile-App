@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.PlaylistContentActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SelectFavouritesActivity"
             android:exported="false" />
         <activity
