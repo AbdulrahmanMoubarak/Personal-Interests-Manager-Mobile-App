@@ -59,4 +59,45 @@ class SharedPreferencesManager() {
         val email = sp.getString("userEmail", "")
         return UserModel(userId.toString(), username.toString(), email.toString())
     }
+
+    fun logoutUser(){
+        val sp =
+            MainApplication.getApplication().getSharedPreferences("AppUser", Context.MODE_PRIVATE)
+        val editor = sp.edit()
+        editor.apply {
+            putBoolean("logged", false)
+        }.apply()
+    }
+
+    fun setTheme(isDark:Boolean){
+        val sp =
+            MainApplication.getApplication().getSharedPreferences("AppPref", Context.MODE_PRIVATE)
+        val editor = sp.edit()
+        editor.apply {
+            putBoolean("isDark", isDark)
+        }.apply()
+    }
+
+    fun isThemeDark():Boolean{
+        val sp =
+            MainApplication.getApplication().getSharedPreferences("AppPref", Context.MODE_PRIVATE)
+        val isDark = sp.getBoolean("isDark", false)
+        return isDark
+    }
+
+    fun setLang(lang:String){
+        val sp =
+            MainApplication.getApplication().getSharedPreferences("AppPref", Context.MODE_PRIVATE)
+        val editor = sp.edit()
+        editor.apply {
+            putString("lang", lang)
+        }.apply()
+    }
+
+    fun getLang():String?{
+        val sp =
+            MainApplication.getApplication().getSharedPreferences("AppPref", Context.MODE_PRIVATE)
+        val lang = sp.getString("lang", "en")
+        return lang
+    }
 }

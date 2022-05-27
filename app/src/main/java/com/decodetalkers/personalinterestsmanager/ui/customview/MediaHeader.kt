@@ -3,7 +3,6 @@ package com.decodetalkers.personalinterestsmanager.ui.customview
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
@@ -14,11 +13,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
 import com.decodetalkers.personalinterestsmanager.R
+import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.globalutils.PermissionManager
+import com.decodetalkers.personalinterestsmanager.ui.LoadLocalMusicActivity
+import com.decodetalkers.personalinterestsmanager.ui.ProfileSettingsActivity
 import com.decodetalkers.personalinterestsmanager.ui.SearchResultActivity
 import com.decodetalkers.radioalarm.application.MainApplication
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.android.synthetic.main.activity_profile_settings.*
 import kotlinx.android.synthetic.main.media_header.view.*
 
 
@@ -37,7 +41,9 @@ class MediaHeader @JvmOverloads constructor(
 
     private var viewItem: View
     private var headerImage: ImageView
+    private var headerProfileImage: ImageView
     private var headerBookstore: ImageView
+    private var headerLocalMusic: ImageView
     private var headerTitle: TextView
     private lateinit var mediaType: String
     private var isSearchView = false
@@ -45,8 +51,12 @@ class MediaHeader @JvmOverloads constructor(
     init {
         viewItem = inflate(getContext(), R.layout.media_header, this)
         headerImage = viewItem.imageView
+        headerProfileImage = viewItem.header_profile
         headerTitle = viewItem.txt_title
         headerBookstore = viewItem.bookstoresButton
+        headerLocalMusic = viewItem.localMusicButton
+
+        setUserImage()
 
         header_searchIcon.setOnClickListener {
             toggleView()
@@ -54,6 +64,11 @@ class MediaHeader @JvmOverloads constructor(
 
         search_backArrow.setOnClickListener {
             toggleView()
+        }
+
+        header_profile.setOnClickListener {
+            val intent = Intent(context, ProfileSettingsActivity::class.java)
+            context.startActivity(intent)
         }
 
         header_searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -85,26 +100,17 @@ class MediaHeader @JvmOverloads constructor(
                 headerImage.setImageResource(R.drawable.ic_book_circle_svgr)
                 headerBookstore.visibility = View.VISIBLE
                 headerBookstore.setOnClickListener {
-                    val loc = getUserLocation()
-                    if(loc.latitude == -1000000.0){
-                        val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
-                        alertDialog.setTitle("Can't open maps")
-                        alertDialog.setMessage("You have to enable location permission")
-                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
-                        alertDialog.show()
-                    } else {
-                        val gmmIntentUri =
-                            Uri.parse("geo:${loc.latitude},${loc.longitude}?&q=nearby bookstores")
-                        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                        mapIntent.setPackage("com.google.android.apps.maps")
-                        context.startActivity(mapIntent)
-                    }
+                    findNearestBookstores()
                 }
             }
             HEADER_MUSIC -> {
                 headerTitle.text = MainApplication.getAppContext()?.getText(R.string.music)
                 headerImage.setImageResource(R.drawable.ic_music_circle_svg)
+                headerLocalMusic.visibility = View.VISIBLE
+                headerLocalMusic.setOnClickListener {
+                    openLocalMusicActivity()
+                }
+
             }
             HEADER_LIBRARY -> {
                 headerTitle.text = MainApplication.getAppContext()?.getText(R.string.library)
@@ -113,7 +119,47 @@ class MediaHeader @JvmOverloads constructor(
         }
     }
 
-    fun toggleView() {
+    private fun findNearestBookstores() {
+        val loc = getUserLocation()
+        if (loc.latitude == -1000000.0) {
+            val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
+            alertDialog.setTitle("Can't open maps")
+            alertDialog.setMessage("You have to enable location permission")
+            alertDialog.setButton(
+                AlertDialog.BUTTON_NEUTRAL,
+                "OK",
+                { dialog, which -> dialog.dismiss() })
+            alertDialog.show()
+        } else {
+            val gmmIntentUri =
+                Uri.parse("geo:${loc.latitude},${loc.longitude}?&q=nearby bookstores")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            context.startActivity(mapIntent)
+        }
+    }
+
+    private fun openLocalMusicActivity() {
+        val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
+        alertDialog.setTitle("Load Local Music")
+        alertDialog.setMessage("Are you sure you want to load or update your own local music in the app?")
+        alertDialog.setButton(
+            AlertDialog.BUTTON_POSITIVE,
+            "Yes"
+        ) { dialog, _ ->
+            val intent = Intent(context, LoadLocalMusicActivity::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+            dialog.dismiss()
+        }
+        alertDialog.setButton(
+            AlertDialog.BUTTON_NEGATIVE,
+            "No"
+        ) { dialog, _ -> dialog.dismiss() }
+        alertDialog.show()
+    }
+
+    private fun toggleView() {
         if (!isSearchView) {
             searchCard.visibility = View.VISIBLE
             titleCard.visibility = View.GONE
@@ -142,13 +188,20 @@ class MediaHeader @JvmOverloads constructor(
             val locationManager =
                 context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-            if(location != null) {
+            if (location != null) {
                 return LatLng(location.latitude, location.longitude)
-            } else{
+            } else {
                 return LatLng(-1000000.0, -1000000.0)
             }
         } else {
             return LatLng(-1000000.0, -1000000.0)
         }
+    }
+
+    private fun setUserImage(){
+        Glide.with(this)
+            .load(Uri.parse(AppUser.user_image))
+            .circleCrop()
+            .into(headerProfileImage)
     }
 }

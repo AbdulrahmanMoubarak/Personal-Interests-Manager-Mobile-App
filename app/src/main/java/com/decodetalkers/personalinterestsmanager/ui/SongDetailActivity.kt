@@ -8,35 +8,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
-import com.decodetalkers.personalinterestsmanager.models.ArtistModel
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.models.SongModel
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
-import com.decodetalkers.personalinterestsmanager.ui.adapters.ArtistImageSliderAdapter
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.TYPE_ARTIST
 import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.customview.ChoosePlaylistDialog
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayer.PlaybackEventListener
 import com.google.android.youtube.player.YouTubePlayerView
-import kotlinx.android.synthetic.main.activity_movie_detail.*
-import kotlinx.android.synthetic.main.activity_search_result.*
 import kotlinx.android.synthetic.main.activity_song_detail.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import okhttp3.ResponseBody
-import java.lang.Exception
 
 class SongDetailActivity : YouTubeBaseActivity() {
 
@@ -47,6 +38,7 @@ class SongDetailActivity : YouTubeBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_song_detail)
 
         if (Build.VERSION.SDK_INT >= 23) {
@@ -69,13 +61,18 @@ class SongDetailActivity : YouTubeBaseActivity() {
             i.data = Uri.parse(mSong.spotify_link)
             startActivity(i)
         }
+
+        music_detail_miniplayer.setOnAddPlaylistListener {
+            showPlaylistDialog()
+        }
     }
 
     override fun onStop() {
         super.onStop()
         try {
             curYtPos = mYoutubePlayer.currentTimeMillis
-        }catch (e: Exception){}
+        } catch (e: Exception) {
+        }
 
     }
 
@@ -101,7 +98,7 @@ class SongDetailActivity : YouTubeBaseActivity() {
                     youTubePlayer.seekToMillis(curYtPos)
                     try {
                         getSongListeningTimesUpdateResult(500)
-                    }catch (e: Exception){
+                    } catch (e: Exception) {
                         Log.d(SongDetailActivity::class.java.simpleName, "updateListening: Failed")
                     }
                 }
@@ -110,7 +107,11 @@ class SongDetailActivity : YouTubeBaseActivity() {
                     provider: YouTubePlayer.Provider,
                     youTubeInitializationResult: YouTubeInitializationResult
                 ) {
-                    Toast.makeText(applicationContext, youTubeInitializationResult.name, Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        applicationContext,
+                        youTubeInitializationResult.name,
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -188,21 +189,62 @@ class SongDetailActivity : YouTubeBaseActivity() {
         emit(response)
     }
 
-    private fun updateUserSongListening(songId: String, userId: Int) = flow{
+    private fun updateUserSongListening(songId: String, userId: Int) = flow {
         val response = RetrofitBuilder.pimApiService.updateSongListeningTimes(userId, songId)
         emit(response.code())
     }
 
-    private fun getSongListeningTimesUpdateResult(blockTime: Long){
+    private fun getSongListeningTimesUpdateResult(blockTime: Long) {
         CoroutineScope(Dispatchers.IO).launch {
             updateUserSongListening(mSong.song_spotify_id, AppUser.user_id).collect {
-                if (it != 200){
+                if (it != 200) {
                     delay(blockTime)
-                    if (blockTime < 20000){
-                        getSongListeningTimesUpdateResult(blockTime*2)
+                    if (blockTime < 20000) {
+                        getSongListeningTimesUpdateResult(blockTime * 2)
                     }
                 }
             }
         }
+    }
+
+    private fun getAddSongToPlaylistResult(playlistId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            addSongToPlaylist(playlistId).collect {
+                withContext(Dispatchers.Main) {
+                    if (it) {
+                        Toast.makeText(
+                            this@SongDetailActivity,
+                            "Successfully added ${mSong.title}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@SongDetailActivity,
+                            "Failed to add ${mSong.title}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addSongToPlaylist(playlistId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.addPlaylistItem(
+            playlistId,
+            mSong.song_spotify_id,
+            mSong.title,
+            mSong.image
+        )
+        if (response.code() == 200) {
+            emit(true)
+        } else {
+            emit(false)
+        }
+    }
+
+    private fun showPlaylistDialog(){
+        val plDialog = ChoosePlaylistDialog(this,::getAddSongToPlaylistResult,"music")
+        plDialog.show()
     }
 }

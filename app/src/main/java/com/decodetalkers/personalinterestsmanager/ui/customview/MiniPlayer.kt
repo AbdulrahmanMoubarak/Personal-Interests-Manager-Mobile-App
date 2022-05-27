@@ -23,6 +23,7 @@ class MiniPlayer @JvmOverloads constructor(
     private var buttonReplay: ImageView
     private var isPlaying: Boolean
     private lateinit var youTubePlayer: YouTubePlayer
+    private var onAddPlaylistListener: (() -> Unit)? = null
 
     init {
         viewItem = inflate(getContext(), R.layout.music_mini_player, this)
@@ -39,6 +40,10 @@ class MiniPlayer @JvmOverloads constructor(
                 play()
                 isPlaying = true
             }
+        }
+
+        buttonAddPlaylist.setOnClickListener {
+            onAddPlaylistListener?.let { it1 -> it1() }
         }
 
         buttonReplay.setOnClickListener {
@@ -124,5 +129,9 @@ class MiniPlayer @JvmOverloads constructor(
             buttonPlayPause.setImageResource(R.drawable.ic_play_svgrepo_com)
             this.youTubePlayer.pause()
         }
+    }
+
+    fun setOnAddPlaylistListener(listener:()->Unit){
+        this.onAddPlaylistListener = listener
     }
 }

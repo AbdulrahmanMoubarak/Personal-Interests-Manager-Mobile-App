@@ -11,12 +11,9 @@ class LocalMusicLoader {
 
     private val musicPathList = mutableListOf<File>()
 
-    fun loadAllLocalMusicPaths(): Flow<List<File>> {
-        fileTraverseHelper(INTERNAL_STORAGE_ROOT_PATH)
-        fileTraverseHelper(EXTERNAL_STORAGE_ROOT_PATH)
-        return flow{
-            emit(musicPathList)
-        }
+    fun loadAllLocalMusicPaths(uri: String) = flow {
+        fileTraverseHelper(uri)
+        emit(musicPathList)
     }
 
     private fun fileTraverseHelper(cur_path: String) {
@@ -37,8 +34,5 @@ class LocalMusicLoader {
                 }
             }
         }
-        return
     }
-
-
 }

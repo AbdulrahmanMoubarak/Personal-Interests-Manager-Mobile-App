@@ -30,6 +30,7 @@ class PlaylistContentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_playlist_content)
         supportActionBar?.hide()
 

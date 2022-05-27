@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="adventure"
-        android:textColor="?attr/inputTextColor"
+        android:textColor="?attr/AlertButtonText"
         android:textSize="@dimen/SectionTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

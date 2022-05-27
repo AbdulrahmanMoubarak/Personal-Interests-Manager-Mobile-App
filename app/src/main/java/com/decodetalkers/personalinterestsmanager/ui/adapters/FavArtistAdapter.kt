@@ -34,6 +34,9 @@ class FavArtistAdapter(var onClick: (itemId: String) -> Unit) :
                 holder.itemView.setBackgroundColor(
                     MainApplication.getApplication().getColor(R.color.darkGreen)
                 )
+                holder.itemName.setTextColor(
+                    MainApplication.getApplication().getColor(R.color.white)
+                )
             }
         } else{
             val packageInfo = MainApplication.getAppContext().getPackageManager().getPackageInfo(
@@ -41,14 +44,22 @@ class FavArtistAdapter(var onClick: (itemId: String) -> Unit) :
                 PackageManager.GET_META_DATA
             );
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (packageInfo.applicationInfo.theme == R.style.Theme_PersonalInterestsManagerPrimary)
+                if (packageInfo.applicationInfo.theme == R.style.Theme_PersonalInterestsManagerPrimary) {
                     holder.itemView.setBackgroundColor(
                         MainApplication.getApplication().getColor(R.color.white)
                     )
-                else if (packageInfo.applicationInfo.theme == R.style.Theme_PersonalInterestsManagerDark)
+                    holder.itemName.setTextColor(
+                        MainApplication.getApplication().getColor(R.color.darkGray)
+                    )
+                }
+                else if (packageInfo.applicationInfo.theme == R.style.Theme_PersonalInterestsManagerDark) {
                     holder.itemView.setBackgroundColor(
                         MainApplication.getApplication().getColor(R.color.darkGray)
                     )
+                    holder.itemName.setTextColor(
+                        MainApplication.getApplication().getColor(R.color.white)
+                    )
+                }
             }
         }
 

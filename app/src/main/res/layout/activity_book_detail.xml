@@ -11,6 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/bookDetail_ButtonAddPl"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="16dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_add_list_svgrepo_com"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.146"
+            app:layout_constraintStart_toEndOf="@+id/movieDetail_ButtonGBooks"
+            app:layout_constraintTop_toBottomOf="@+id/book_detail_authors" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/book_detail_image_card"
             android:layout_width="wrap_content"

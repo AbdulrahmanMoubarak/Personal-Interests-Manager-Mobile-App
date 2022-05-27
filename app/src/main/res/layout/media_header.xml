@@ -61,6 +61,17 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/localMusicButton"
+                android:visibility="gone"
+                android:layout_width="@dimen/mediaHeaderImageSize"
+                android:layout_height="@dimen/mediaHeaderImageSize"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_file_find_svgrepo_com"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/header_searchIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/header_searchIcon"
                 android:layout_width="@dimen/mediaHeaderImageSize"
                 android:layout_height="@dimen/mediaHeaderImageSize"

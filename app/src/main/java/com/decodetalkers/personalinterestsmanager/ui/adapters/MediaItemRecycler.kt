@@ -68,14 +68,14 @@ class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: St
             holder.itemNameCard.layoutParams.width = 350
 
             if (Item_List.get(position).item_type.lowercase() == TYPE_ARTIST) {
-                MainApplication.getAppContext()?.let {
+                MainApplication.getAppContext().let {
                     Glide.with(it)
                         .load(Item_List.get(position).item_image)
                         .circleCrop()
                         .into(holder.itemImage)
                 }
             } else if(Item_List.get(position).item_type.lowercase() == TYPE_BOOK){
-                MainApplication.getAppContext()?.let {
+                MainApplication.getAppContext().let {
                     Glide.with(it)
                         .load(Item_List.get(position).item_image)
                         .error(R.drawable.ic_book_circle_svgr)

@@ -87,10 +87,27 @@ class HomeScreensViewModel : ViewModel() {
         emit(response)
     }
 
+    fun getAllPlaylistsOfType(userId: Int, type: String) = flow{
+        val response = RetrofitBuilder.pimApiService.getAllPlayListsOfType(userId, type)
+            .body() as List<MediaItemOfListModel>
+        emit(response)
+    }
+
     fun loadPlaylistItems(playlistId: Int) = flow {
         val response = RetrofitBuilder.pimApiService.getPlaylistItems(playlistId)
             .body() as List<MediaItemOfListModel>
         emit(response)
+    }
+
+    fun uploadLocalMusicData(userId: Int, songs: List<String>) = flow {
+        val response = RetrofitBuilder.pimApiService.uploadLocalMusicData(
+            userId, songs
+        )
+        if (response.code() == 200) {
+            emit(true)
+        } else {
+            emit(false)
+        }
     }
 
     fun getMoviesSearchResults(name: String) = flow {

@@ -18,6 +18,7 @@ import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.BookModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.customview.ChoosePlaylistDialog
 import com.decodetalkers.personalinterestsmanager.ui.customview.RatingDialogue
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
@@ -37,6 +38,7 @@ class BookDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_book_detail)
         supportActionBar?.hide()
 
@@ -49,17 +51,17 @@ class BookDetailActivity : AppCompatActivity() {
         initViews()
     }
 
-    private fun initViews(){
+    private fun initViews() {
         homeScreensVM =
             ViewModelProvider(this).get(HomeScreensViewModel::class.java)
         mBook = intent.getSerializableExtra("book_model") as BookModel
         book_detail_title.text = mBook.book_title
         book_detail_authors.text = mBook.book_author
         book_detail_desc.text = mBook.description
-        book_detail_cat.text = mBook.categories.replace(',',' ')
+        book_detail_cat.text = mBook.categories.replace(',', ' ')
         book_detail_image.load(mBook.image_url)
 
-        if(mBook.user_rating != -1F){
+        if (mBook.user_rating != -1F) {
             bookDetail_ButtonRating.setImageResource(R.drawable.ic_user_rating)
             book_detail_user_rating.visibility = View.VISIBLE
             book_detail_user_rating.text = mBook.user_rating.times(2).toString()
@@ -75,6 +77,10 @@ class BookDetailActivity : AppCompatActivity() {
             startActivity(i)
         }
 
+        bookDetail_ButtonAddPl.setOnClickListener {
+            showPlaylistDialog()
+        }
+
         loadRecommendations()
     }
 
@@ -83,11 +89,11 @@ class BookDetailActivity : AppCompatActivity() {
         ratingDialogue.show()
     }
 
-    private fun loadRecommendations(){
+    private fun loadRecommendations() {
         CoroutineScope(Dispatchers.IO).launch {
             UiManager().setProgressBarState(book_detail_rec_progress_bar, true)
             homeScreensVM.getBookBasedRecommendation(mBook.isbn).collect {
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     UiManager().setProgressBarState(book_detail_rec_progress_bar, false)
                     setRecyclerList(it)
                 }
@@ -111,12 +117,16 @@ class BookDetailActivity : AppCompatActivity() {
     ) {
         UiManager().setProgressBarState(book_detail_rec_progress_bar, true)
         CoroutineScope(Dispatchers.IO).launch {
-            homeScreensVM.getBookById(bookId, AppUser.user_id).collect{
+            homeScreensVM.getBookById(bookId, AppUser.user_id).collect {
                 withContext(Dispatchers.Main) {
                     UiManager().setProgressBarState(book_detail_rec_progress_bar, false)
                     val intent = Intent(this@BookDetailActivity, BookDetailActivity::class.java)
                     intent.putExtra("book_model", it)
-                    val actOptions = ActivityOptions.makeSceneTransitionAnimation(this@BookDetailActivity, bookImageView, "SharedPoster")
+                    val actOptions = ActivityOptions.makeSceneTransitionAnimation(
+                        this@BookDetailActivity,
+                        bookImageView,
+                        "SharedPoster"
+                    )
                     startActivity(intent, actOptions.toBundle())
                 }
             }
@@ -125,21 +135,58 @@ class BookDetailActivity : AppCompatActivity() {
 
     private fun onRating(rating: Float) {
         CoroutineScope(Dispatchers.IO).launch {
-            homeScreensVM.addBookRating(AppUser.user_id, mBook.isbn, mBook.book_title, rating*2).collect {
-                withContext(Dispatchers.Main) {
-                    if(it == 200) {
-                        Toast.makeText(this@BookDetailActivity, "Rating Added", Toast.LENGTH_SHORT)
-                            .show()
-                        bookDetail_ButtonRating.setImageResource(R.drawable.ic_user_rating)
-                        bookDetail_ButtonRating.isClickable = false
-                        book_detail_user_rating.visibility = View.VISIBLE
-                        book_detail_user_rating.text = rating.times(2).toString()
-                    } else {
-                        Toast.makeText(this@BookDetailActivity, "Error adding rating", Toast.LENGTH_SHORT)
-                            .show()
+            homeScreensVM.addBookRating(AppUser.user_id, mBook.isbn, mBook.book_title, rating * 2)
+                .collect {
+                    withContext(Dispatchers.Main) {
+                        if (it == 200) {
+                            Toast.makeText(
+                                this@BookDetailActivity,
+                                "Rating Added",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            bookDetail_ButtonRating.setImageResource(R.drawable.ic_user_rating)
+                            bookDetail_ButtonRating.isClickable = false
+                            book_detail_user_rating.visibility = View.VISIBLE
+                            book_detail_user_rating.text = rating.times(2).toString()
+                        } else {
+                            Toast.makeText(
+                                this@BookDetailActivity,
+                                "Error adding rating",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
                     }
                 }
-            }
         }
+    }
+
+    private fun addBookToPlaylist(playlistId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            homeScreensVM.addPlaylistItem(playlistId, mBook.isbn, mBook.book_title, mBook.image_url)
+                .collect {
+                    withContext(Dispatchers.Main) {
+                        if (it) {
+                            Toast.makeText(
+                                this@BookDetailActivity,
+                                "Successfully added ${mBook.book_title}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                this@BookDetailActivity,
+                                "Failed to add ${mBook.book_title}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun showPlaylistDialog() {
+        val plDialog = ChoosePlaylistDialog(this, ::addBookToPlaylist, "books")
+        plDialog.show()
     }
 }

@@ -45,9 +45,9 @@ class LibraryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         titleCardLibrary.setHeaderType(MediaHeader.HEADER_LIBRARY)
 
-
         homeScreensVM =
             ViewModelProvider(requireActivity()).get(HomeScreensViewModel::class.java)
+
 
         setRecyclerList(arrayListOf())
 
@@ -95,8 +95,12 @@ class LibraryFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             homeScreensVM.getAllPlaylists(AppUser.user_id).collect{
                 withContext(Dispatchers.Main){
-                    UiManager().setProgressBarState(library_progress, false)
-                    setRecyclerList(it)
+                    try {
+                        UiManager().setProgressBarState(library_progress, false)
+                        setRecyclerList(it)
+                    }catch (e: Exception){
+
+                    }
                 }
             }
         }

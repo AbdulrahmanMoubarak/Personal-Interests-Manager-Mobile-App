@@ -56,7 +56,7 @@ interface RetrofitPimApi {
     @GET("/playlist/get")
     suspend fun getAllPlayListsOfType(
         @Query("userId") userId: Int,
-        @Query("type") type: Int
+        @Query("type") type: String
     ): Response<List<MediaItemOfListModel>>
 
     @GET("/playlist/items")
@@ -174,4 +174,11 @@ interface RetrofitPimApi {
 
     @GET("/music/genres")
     suspend fun getMusicGenres(): Response<List<GenreModel>>
+
+    @FormUrlEncoded
+    @POST("/song/local-music-upload")
+    suspend fun uploadLocalMusicData(
+        @Field("userId") userId: Int,
+        @Field("songs[]") songs: List<String>
+    ): Response<ResponseBody>
 }

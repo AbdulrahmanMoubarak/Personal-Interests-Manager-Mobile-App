@@ -1,5 +1,6 @@
 package com.decodetalkers.personalinterestsmanager.ui
 
+import android.Manifest
 import android.animation.Animator
 import android.content.Intent
 import android.os.Build
@@ -12,11 +13,13 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
+import com.decodetalkers.personalinterestsmanager.globalutils.PermissionManager
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.models.UserModel
 import com.decodetalkers.personalinterestsmanager.ui.util.FormValidator
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
+import com.decodetalkers.radioalarm.application.MainApplication
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_music.*
 import kotlinx.coroutines.*
@@ -34,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
@@ -43,10 +47,20 @@ class LoginActivity : AppCompatActivity() {
             window.statusBarColor = getColor(R.color.black)
         }
 
-        //AppUser.setUserData(2018170873, "AbdulRahman Moubarak", "oddaled@gmail.com")
-
         homeScreensVM =
             ViewModelProvider(this).get(HomeScreensViewModel::class.java)
+
+        if (!PermissionManager().checkForPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        ) {
+
+            PermissionManager().requestPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
 
         loginButton.setOnClickListener {
             if (FormValidator().validateLogin(
@@ -99,6 +113,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        if (!SharedPreferencesManager().isThemeDark())
+            bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2_blue)
+        else
+            bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2_orange)
     }
 
     private fun validateEmailRemotely() {
@@ -202,7 +220,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun onLoadingFinished() {
         loadingProgressBar.visibility = View.GONE
-        bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2_orange)
+        if (!SharedPreferencesManager().isThemeDark())
+            bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2_blue)
+        else
+            bookIconImageView.setImageResource(R.drawable.ic_logo_h_v2_orange)
         if(SharedPreferencesManager().isUserLoggedIn()){
             val user = SharedPreferencesManager().getUser()
             AppUser.setUserData(user.user_id.toInt(), user.user_name, user.user_email)

@@ -24,4 +24,6 @@
     <attr name="CardBg" format="color" />
     <attr name="CardSelectedBg" format="color" />
     <attr name="DialogBg" format="color" />
+    <attr name="AlertButton" format="color" />
+    <attr name="AlertButtonText" format="color" />
 </resources>

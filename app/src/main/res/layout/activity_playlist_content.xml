@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <GridView
-        android:horizontalSpacing="5dp"
+        android:horizontalSpacing="52dp"
         android:numColumns="2"
         android:verticalSpacing="3dp"
         android:id="@+id/playlist_items_recycler"

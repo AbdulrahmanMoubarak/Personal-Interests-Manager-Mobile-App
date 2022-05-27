@@ -25,6 +25,7 @@ import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.MOVIE_IMAGE_LINK_M
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.TYPE_CAST_MEMBER
 import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.customview.ChoosePlaylistDialog
 import com.decodetalkers.personalinterestsmanager.ui.customview.RatingDialogue
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.google.android.youtube.player.YouTubeBaseActivity
@@ -46,6 +47,7 @@ class MovieDetailActivity : YouTubeBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_movie_detail)
         //supportActionBar?.hide()
 
@@ -99,6 +101,10 @@ class MovieDetailActivity : YouTubeBaseActivity() {
             movieDetail_ButtonRating.setOnClickListener {
                 showRatingDialogue()
             }
+        }
+
+        movie_detail_add_pl.setOnClickListener {
+            showPlaylistDialog()
         }
 
     }
@@ -233,5 +239,45 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         }
     }
 
+    private fun getAddMovieToPlaylistResult(playlistId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            addMovieToPlaylist(playlistId).collect {
+                withContext(Dispatchers.Main) {
+                    if (it) {
+                        Toast.makeText(
+                            this@MovieDetailActivity,
+                            "Successfully added ${mMovie.title}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@MovieDetailActivity,
+                            "Failed to add ${mMovie.title}, please try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addMovieToPlaylist(playlistId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.addPlaylistItem(
+            playlistId,
+            mMovie.movie_id.toString(),
+            mMovie.title,
+            MOVIE_IMAGE_LINK_M+mMovie.poster
+        )
+        if (response.code() == 200) {
+            emit(true)
+        } else {
+            emit(false)
+        }
+    }
+
+    private fun showPlaylistDialog(){
+        val plDialog = ChoosePlaylistDialog(this,::getAddMovieToPlaylistResult,"movies")
+        plDialog.show()
+    }
 
 }

@@ -1,7 +1,9 @@
 package com.decodetalkers.personalinterestsmanager.ui
 
+import android.Manifest
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,8 +12,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.decodetalkers.myapplication.locatmusicloader.util.Constants
 import com.decodetalkers.personalinterestsmanager.R
+import com.decodetalkers.personalinterestsmanager.globalutils.PermissionManager
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
+import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.activity_home.*
 
@@ -19,27 +24,46 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        UiManager().setInitialTheme(this)
+
         setContentView(R.layout.activity_home)
         supportActionBar?.hide()
+
+        homeBottomNavigationMenu.itemIconTintList = null
+
+        var controller = findNavController(R.id.homeNavView)
+
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.moviesFragment,
+                R.id.booksFragment,
+                R.id.musicFragment,
+                R.id.libraryFragment
+            )
+        )
+
+        setupActionBarWithNavController(controller, appBarConfiguration)
+
+        homeBottomNavigationMenu.setupWithNavController(controller)
+
+        chatbotButton.imageTintList = ColorStateList.valueOf(Color.rgb(255, 255, 255))
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!PermissionManager().checkForPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
+            PermissionManager().requestPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
 
         if (Build.VERSION.SDK_INT >= 23) {
             val window = this.window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = getColor(R.color.black)
         }
-
-
-        homeBottomNavigationMenu.itemIconTintList = null
-
-        var controller = findNavController(R.id.homeNavView)
-
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.moviesFragment, R.id.booksFragment, R.id.musicFragment, R.id.libraryFragment))
-
-        setupActionBarWithNavController(controller, appBarConfiguration)
-
-        homeBottomNavigationMenu.setupWithNavController(controller)
-
-        chatbotButton.imageTintList= ColorStateList.valueOf(Color.rgb(255, 255, 255))
     }
 
     override fun onDestroy() {

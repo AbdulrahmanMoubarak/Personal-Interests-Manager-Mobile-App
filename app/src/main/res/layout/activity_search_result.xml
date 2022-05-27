@@ -45,11 +45,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <GridView
+        android:layout_marginHorizontal="16dp"
         android:id="@+id/results_gv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginVertical="8dp"
-        android:horizontalSpacing="1dp"
+        android:horizontalSpacing="52dp"
         android:numColumns="2"
         android:verticalSpacing="1dp"
         app:layout_constraintBottom_toBottomOf="parent"

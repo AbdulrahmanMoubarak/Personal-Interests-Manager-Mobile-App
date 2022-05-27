@@ -31,6 +31,7 @@
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/button_drawable.xml" value="0.1495" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/gradient_bg.xml" value="0.25" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_add_list_svgrepo_com.xml" value="0.159375" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_app_icon.xml" value="0.1455" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.1495" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.148" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1495" />
@@ -39,12 +40,19 @@
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_bookstore_book_shop_book_publisher_svgrepo_com__1_.xml" value="0.1495" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_bookstore_map_marker.xml" value="0.1495" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_chatbot_svgrepo_com.xml" value="0.2601851851851852" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_file_find_svgrepo_com.xml" value="0.1325" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_forward_svgrepo_com.xml" value="0.148" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_library2.xml" value="0.1375" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_2_0.xml" value="0.148" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_h_orangeicon.xml" value="0.1455" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_h_v2.xml" value="0.1495" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_h_v2_blue.xml" value="0.132" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_h_v2_orange.xml" value="0.1495" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_h_v2_white.xml" value="0.1495" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_icon.xml" value="0.1455" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_icon2.xml" value="0.1375" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_v3.xml" value="0.1455" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_logo_v3_2.xml" value="0.1455" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_movie_circle_svg.xml" value="0.1495" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_movies2.xml" value="0.1375" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/ic_movies_not_selected.xml" value="0.1495" />
@@ -60,16 +68,19 @@
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/music_selector.xml" value="0.1375" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/progress_bar_style.xml" value="0.15989583333333332" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/drawable/progressbar_style.xml" value="0.15989583333333332" />
-        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_book_detail.xml" value="0.14270833333333333" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_book_detail.xml" value="0.264" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_home.xml" value="0.16666666666666666" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_load_local_music.xml" value="0.2164855072463768" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_movie_detail.xml" value="0.22540983606557377" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_nearest_bookstore.xml" value="0.2164855072463768" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_playlist_content.xml" value="0.13541666666666666" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_profile_settings.xml" value="0.21557971014492755" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_search_result.xml" value="0.176" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_select_favourites.xml" value="0.14270833333333333" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/activity_song_detail.xml" value="0.264" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/artist_image_slider_adapter.xml" value="0.14322916666666666" />
+        <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/choose_playlist_dialog.xml" value="0.13541666666666666" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/create_playlist_dialog.xml" value="0.2164855072463768" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/fav_artists_adapter.xml" value="0.13541666666666666" />
         <entry key="..\:/FCIS SWE 2021/Graduation Project/Project source code/Personal Interests Manager mobile app/app/src/main/res/layout/fav_atrists_adapter.xml" value="0.14270833333333333" />

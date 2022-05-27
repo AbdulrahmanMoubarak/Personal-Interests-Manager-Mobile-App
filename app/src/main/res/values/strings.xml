@@ -50,4 +50,10 @@
     <string name="finish">Finish</string>
     <string name="create_playlist">Create Playlist</string>
     <string name="playlistName">Playlist Name</string>
+    <string name="music_found">Music Files Found</string>
+    <string name="choose_playlist">Choose a Playlist</string>
+    <string name="themes">App Themes</string>
+    <string name="darkTheme">Dark Theme</string>
+    <string name="English">English</string>
+    <string name="logout">Logout</string>
 </resources>

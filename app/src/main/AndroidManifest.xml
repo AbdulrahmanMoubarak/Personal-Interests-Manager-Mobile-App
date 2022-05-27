@@ -20,9 +20,15 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_logo_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PersonalInterestsManagerDark"
+        android:theme="@style/Theme.PersonalInterestsManagerPrimary"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity
+            android:name=".ui.ProfileSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoadLocalMusicActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.PlaylistContentActivity"
             android:exported="false" />
