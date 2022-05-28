@@ -54,7 +54,7 @@ class ChooseMusicGenresFragment : Fragment() {
             if (selectedItems.size < 3) {
                 Toast.makeText(
                     requireContext(),
-                    "You have to select at least 3 genres",
+                    getString(R.string.select3Genres),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
@@ -112,7 +112,7 @@ class ChooseMusicGenresFragment : Fragment() {
                     if (!it) {
                         Toast.makeText(
                             requireContext(),
-                            "Error, Please Try Again",
+                            getString(R.string.errorTryAgain),
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {

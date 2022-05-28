@@ -1,17 +1,20 @@
 package com.decodetalkers.personalinterestsmanager.ui
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
+import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
+import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemArrayAdapter
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler
-import com.decodetalkers.personalinterestsmanager.ui.adapters.PlaylistAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
@@ -21,8 +24,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
-class PlaylistContentActivity : AppCompatActivity() {
+class PlaylistContentActivity : AppCompatActivity() , ActivityInterface {
+    private val localizationDelegate = LocalizationActivityDelegate(this)
     private var plId: Int = -1
     private var plName: String = ""
     private lateinit var homeScreensVM: HomeScreensViewModel
@@ -33,6 +38,11 @@ class PlaylistContentActivity : AppCompatActivity() {
         UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_playlist_content)
         supportActionBar?.hide()
+
+        localizationDelegate.addOnLocaleChangedListener(this)
+        localizationDelegate.onCreate()
+
+        checkAndSetLanguage()
 
         if (Build.VERSION.SDK_INT >= 23) {
             val window = this.window
@@ -129,6 +139,56 @@ class PlaylistContentActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
+        }
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        localizationDelegate.onResume(this)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        applyOverrideConfiguration(localizationDelegate.updateConfigurationLocale(newBase))
+        super.attachBaseContext(newBase)
+    }
+
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(super.getResources())
+    }
+
+    override fun setLanguage(language: String?) {
+        localizationDelegate.setLanguage(this, language!!)
+    }
+
+    override fun setLanguage(locale: Locale?) {
+        localizationDelegate.setLanguage(this, locale!!)
+    }
+
+    override fun getCurrentLocale(): Locale {
+        return localizationDelegate.getLanguage(this)
+    }
+
+    val currentLanguage: Locale
+        get() = localizationDelegate.getLanguage(this)
+
+    override fun onAfterLocaleChanged() {
+    }
+
+    override fun onBeforeLocaleChanged() {
+    }
+
+    private fun checkAndSetLanguage(){
+        if(SharedPreferencesManager().getLang() == "ar") {
+            setLanguage("ar")
+            UiManager().setLocale(this, "ar")
+        }
+        else {
+            setLanguage(Locale.ENGLISH)
+            UiManager().setLocale(this, "en")
         }
     }
 }

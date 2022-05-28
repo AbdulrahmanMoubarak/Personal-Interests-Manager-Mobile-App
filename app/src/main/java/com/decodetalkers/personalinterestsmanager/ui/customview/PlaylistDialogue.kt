@@ -27,7 +27,7 @@ class PlaylistDialogue(activity: Activity, var onSubmit: (name: String, type: St
         when (p0.id) {
             R.id.playlist_btnSubmit -> {
                 if (pNameEditText.text.toString() == ""){
-                    Toast.makeText(MainApplication.getAppContext(), "You have to enter playlist name", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(MainApplication.getAppContext(), context.getString(R.string.playlistNameError), Toast.LENGTH_SHORT).show()
                 } else {
                     onSubmit(pNameEditText.text.toString(), this.type)
                     dismiss()

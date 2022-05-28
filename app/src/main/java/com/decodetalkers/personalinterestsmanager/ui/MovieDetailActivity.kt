@@ -1,7 +1,9 @@
 package com.decodetalkers.personalinterestsmanager.ui
 
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,8 +15,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
+import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 
 import com.decodetalkers.personalinterestsmanager.models.MovieModel
@@ -34,12 +38,13 @@ import com.google.android.youtube.player.YouTubePlayer
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
-class MovieDetailActivity : YouTubeBaseActivity() {
+class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
+    private val localizationDelegate = LocalizationActivityDelegate(this)
     private lateinit var mMovie: MovieModel
 
     private val mediaItemRecyclerAdapter = MediaItemRecycler(::loadMovieDetailsForActivity)
@@ -49,7 +54,11 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         super.onCreate(savedInstanceState)
         UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_movie_detail)
-        //supportActionBar?.hide()
+
+        localizationDelegate.addOnLocaleChangedListener(this)
+        localizationDelegate.onCreate()
+
+        checkAndSetLanguage()
 
         if (Build.VERSION.SDK_INT >= 23) {
             val window = this.window
@@ -67,8 +76,8 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         movie_detail_status.text = mMovie.status
         movie_detail_releaseDate.text =
             if (mMovie.release_date != "None" && mMovie.release_date != "Unknown") mMovie.release_date else mMovie.status
-        movie_detail_image.load(MOVIE_IMAGE_LINK_M + mMovie.poster)
         movie_detail_image.animation = AnimationUtils.loadAnimation(this, R.anim.scale_animation)
+        movie_detail_image.load(MOVIE_IMAGE_LINK_M + mMovie.poster)
         movie_detail_background.load(MOVIE_IMAGE_LINK_L + mMovie.background) {
             crossfade(true)
             crossfade(300)
@@ -279,5 +288,56 @@ class MovieDetailActivity : YouTubeBaseActivity() {
         val plDialog = ChoosePlaylistDialog(this,::getAddMovieToPlaylistResult,"movies")
         plDialog.show()
     }
+
+    public override fun onResume() {
+        super.onResume()
+        localizationDelegate.onResume(this)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        applyOverrideConfiguration(localizationDelegate.updateConfigurationLocale(newBase))
+        super.attachBaseContext(newBase)
+    }
+
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(super.getResources())
+    }
+
+    override fun setLanguage(language: String?) {
+        localizationDelegate.setLanguage(this, language!!)
+    }
+
+    override fun setLanguage(locale: Locale?) {
+        localizationDelegate.setLanguage(this, locale!!)
+    }
+
+    override fun getCurrentLocale(): Locale {
+        return localizationDelegate.getLanguage(this)
+    }
+
+    val currentLanguage: Locale
+        get() = localizationDelegate.getLanguage(this)
+
+    override fun onAfterLocaleChanged() {
+    }
+
+    override fun onBeforeLocaleChanged() {
+    }
+
+    private fun checkAndSetLanguage(){
+        if(SharedPreferencesManager().getLang() == "ar") {
+            setLanguage("ar")
+            UiManager().setLocale(this, "ar")
+        }
+        else {
+            setLanguage(Locale.ENGLISH)
+            UiManager().setLocale(this, "en")
+        }
+    }
+
 
 }

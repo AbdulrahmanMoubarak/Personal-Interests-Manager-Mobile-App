@@ -2,7 +2,9 @@ package com.decodetalkers.personalinterestsmanager.ui
 
 import android.Manifest
 import android.animation.Animator
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +13,7 @@ import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.globalutils.PermissionManager
@@ -19,16 +22,15 @@ import com.decodetalkers.personalinterestsmanager.models.UserModel
 import com.decodetalkers.personalinterestsmanager.ui.util.FormValidator
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
-import com.decodetalkers.radioalarm.application.MainApplication
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_music.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import java.lang.Exception
+import java.util.*
 
-class LoginActivity : AppCompatActivity() {
-
+class LoginActivity : AppCompatActivity(), ActivityInterface {
+    private val localizationDelegate = LocalizationActivityDelegate(this)
     private lateinit var homeScreensVM: HomeScreensViewModel
 
     private var isLoadingBooksFinished = false
@@ -41,11 +43,16 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
+        localizationDelegate.addOnLocaleChangedListener(this)
+        localizationDelegate.onCreate()
+
         if (Build.VERSION.SDK_INT >= 23) {
             val window = this.window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = getColor(R.color.black)
         }
+
+        checkAndSetLanguage()
 
         homeScreensVM =
             ViewModelProvider(this).get(HomeScreensViewModel::class.java)
@@ -268,4 +275,55 @@ class LoginActivity : AppCompatActivity() {
             }
         })
     }
+
+    public override fun onResume() {
+        super.onResume()
+        localizationDelegate.onResume(this)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        applyOverrideConfiguration(localizationDelegate.updateConfigurationLocale(newBase))
+        super.attachBaseContext(newBase)
+    }
+
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(super.getResources())
+    }
+
+    override fun setLanguage(language: String?) {
+        localizationDelegate.setLanguage(this, language!!)
+    }
+
+    override fun setLanguage(locale: Locale?) {
+        localizationDelegate.setLanguage(this, locale!!)
+    }
+
+    override fun getCurrentLocale(): Locale {
+        return localizationDelegate.getLanguage(this)
+    }
+
+    val currentLanguage: Locale
+        get() = localizationDelegate.getLanguage(this)
+
+    override fun onAfterLocaleChanged() {
+    }
+
+    override fun onBeforeLocaleChanged() {
+    }
+
+    private fun checkAndSetLanguage(){
+        if(SharedPreferencesManager().getLang() == "ar") {
+            setLanguage("ar")
+            UiManager().setLocale(this, "ar")
+        }
+        else {
+            setLanguage(Locale.ENGLISH)
+            UiManager().setLocale(this, "en")
+        }
+    }
+
 }

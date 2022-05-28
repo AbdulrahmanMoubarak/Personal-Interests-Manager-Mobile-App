@@ -56,4 +56,25 @@
     <string name="darkTheme">Dark Theme</string>
     <string name="English">English</string>
     <string name="logout">Logout</string>
+    <string name="mapError">Can\'t open maps</string>
+    <string name="enableLocation">You have to enable location permission</string>
+    <string name="loadLocalMusic">Load Local Music</string>
+    <string name="loadLocalMusicMsg">Are you sure you want to load or update your own local music in the app?</string>
+    <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="playlistNameError">You have to enter playlist name</string>
+    <string name="ratingAdded">Rating Added</string>
+    <string name="ratingError">Error adding rating</string>
+    <string name="successAdd">Successfully added</string>
+    <string name="failedAdd">Failed to add</string>
+    <string name="select3Artists">You have to select at least 3 artists</string>
+    <string name="select3Genres">You have to select at least 3 genres</string>
+    <string name="errorTryAgain">Error, Please Try Again</string>
+    <string name="create_playlist_suc">Playlist created successfully</string>
+    <string name="create_playlist_fail">Failed to create playlist please try again</string>
+    <string name="uploadingData">Uploading Music Data</string>
+    <string name="uploadingDataSuc">Successfully uploaded music data</string>
+    <string name="uploadingDataFail">Error uploading music data, please try again</string>
+    <string name="loadLocalMusicFrom">Loading music from</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.decodetalkers.personalinterestsmanager.ui
 
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,8 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
+import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.models.BookModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
@@ -26,21 +30,26 @@ import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
-class BookDetailActivity : AppCompatActivity() {
+class BookDetailActivity : AppCompatActivity() , ActivityInterface {
     private lateinit var mBook: BookModel
     private var sectionRecyclerAdapter = SectionRecycler(::loadBookDetailsForActivity)
     private lateinit var homeScreensVM: HomeScreensViewModel
-
+    private val localizationDelegate = LocalizationActivityDelegate(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_book_detail)
         supportActionBar?.hide()
+
+        localizationDelegate.addOnLocaleChangedListener(this)
+        localizationDelegate.onCreate()
+
+        checkAndSetLanguage()
 
         if (Build.VERSION.SDK_INT >= 23) {
             val window = this.window
@@ -141,7 +150,7 @@ class BookDetailActivity : AppCompatActivity() {
                         if (it == 200) {
                             Toast.makeText(
                                 this@BookDetailActivity,
-                                "Rating Added",
+                                getString(R.string.ratingAdded),
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
@@ -152,7 +161,7 @@ class BookDetailActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(
                                 this@BookDetailActivity,
-                                "Error adding rating",
+                                getString(R.string.ratingError),
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
@@ -170,13 +179,13 @@ class BookDetailActivity : AppCompatActivity() {
                         if (it) {
                             Toast.makeText(
                                 this@BookDetailActivity,
-                                "Successfully added ${mBook.book_title}",
+                                "${getString(R.string.successAdd)} ${mBook.book_title}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             Toast.makeText(
                                 this@BookDetailActivity,
-                                "Failed to add ${mBook.book_title}",
+                                "${getString(R.string.failedAdd)} ${mBook.book_title}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -188,5 +197,55 @@ class BookDetailActivity : AppCompatActivity() {
     private fun showPlaylistDialog() {
         val plDialog = ChoosePlaylistDialog(this, ::addBookToPlaylist, "books")
         plDialog.show()
+    }
+
+    private fun checkAndSetLanguage(){
+        if(SharedPreferencesManager().getLang() == "ar") {
+            setLanguage("ar")
+            UiManager().setLocale(this, "ar")
+        }
+        else {
+            setLanguage(Locale.ENGLISH)
+            UiManager().setLocale(this, "en")
+        }
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        localizationDelegate.onResume(this)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        applyOverrideConfiguration(localizationDelegate.updateConfigurationLocale(newBase))
+        super.attachBaseContext(newBase)
+    }
+
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(super.getResources())
+    }
+
+    override fun setLanguage(language: String?) {
+        localizationDelegate.setLanguage(this, language!!)
+    }
+
+    override fun setLanguage(locale: Locale?) {
+        localizationDelegate.setLanguage(this, locale!!)
+    }
+
+    override fun getCurrentLocale(): Locale {
+        return localizationDelegate.getLanguage(this)
+    }
+
+    val currentLanguage: Locale
+        get() = localizationDelegate.getLanguage(this)
+
+    override fun onAfterLocaleChanged() {
+    }
+
+    override fun onBeforeLocaleChanged() {
     }
 }

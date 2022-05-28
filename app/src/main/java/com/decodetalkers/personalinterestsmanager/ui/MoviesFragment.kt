@@ -51,6 +51,8 @@ class MoviesFragment : Fragment() {
             loadSectionsAsync(true)
             swipeRefreshMovies.isRefreshing = false
         }
+
+        titleCardMovies.setUserImage(AppUser.user_image)
     }
 
     override fun onStart() {

@@ -56,8 +56,8 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
 
     //ViewModel androidx
     implementation "android.arch.lifecycle:extensions:1.1.1"
@@ -73,7 +73,7 @@ dependencies {
 
     // androidx.fragment
     def fragment_version = "1.4.0-alpha10" // must use for new factory stuff
-    debugImplementation("androidx.fragment:fragment-testing:1.5.0-beta01")
+    debugImplementation("androidx.fragment:fragment-testing:1.5.0-rc01")
     implementation "androidx.fragment:fragment-ktx:1.4.1"
 
     //coil image loader
@@ -102,7 +102,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     //Room database
-    def roomVersion = "2.4.0"
+    def roomVersion = "2.4.2"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
@@ -111,4 +111,7 @@ dependencies {
 
     //Gson
     implementation 'com.google.code.gson:gson:2.9.0'
+
+    //Language Localization
+    implementation 'com.akexorcist:localization:1.2.10'
 }

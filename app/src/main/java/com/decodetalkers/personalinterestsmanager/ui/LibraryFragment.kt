@@ -74,14 +74,14 @@ class LibraryFragment : Fragment() {
                     if (it) {
                         Toast.makeText(
                             requireContext(),
-                            "Playlist ${name} created successfully",
+                            getString(R.string.create_playlist_suc),
                             Toast.LENGTH_SHORT
                         ).show()
                         loadAllPlaylists()
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            "Failed to create playlist please try again",
+                            getString(R.string.create_playlist_fail),
                             Toast.LENGTH_SHORT
                         ).show()
                     }

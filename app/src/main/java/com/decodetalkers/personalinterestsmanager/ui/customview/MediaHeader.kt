@@ -48,6 +48,8 @@ class MediaHeader @JvmOverloads constructor(
     private lateinit var mediaType: String
     private var isSearchView = false
 
+
+
     init {
         viewItem = inflate(getContext(), R.layout.media_header, this)
         headerImage = viewItem.imageView
@@ -57,6 +59,7 @@ class MediaHeader @JvmOverloads constructor(
         headerLocalMusic = viewItem.localMusicButton
 
         setUserImage()
+
 
         header_searchIcon.setOnClickListener {
             toggleView()
@@ -123,11 +126,11 @@ class MediaHeader @JvmOverloads constructor(
         val loc = getUserLocation()
         if (loc.latitude == -1000000.0) {
             val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
-            alertDialog.setTitle("Can't open maps")
-            alertDialog.setMessage("You have to enable location permission")
+            alertDialog.setTitle(context.getString(R.string.mapError))
+            alertDialog.setMessage(context.getString(R.string.enableLocation))
             alertDialog.setButton(
                 AlertDialog.BUTTON_NEUTRAL,
-                "OK",
+                context.getString(R.string.ok),
                 { dialog, which -> dialog.dismiss() })
             alertDialog.show()
         } else {
@@ -141,20 +144,19 @@ class MediaHeader @JvmOverloads constructor(
 
     private fun openLocalMusicActivity() {
         val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
-        alertDialog.setTitle("Load Local Music")
-        alertDialog.setMessage("Are you sure you want to load or update your own local music in the app?")
+        alertDialog.setTitle(context.getString(R.string.loadLocalMusic))
+        alertDialog.setMessage(context.getString(R.string.loadLocalMusicMsg))
         alertDialog.setButton(
             AlertDialog.BUTTON_POSITIVE,
-            "Yes"
+            context.getString(R.string.yes)
         ) { dialog, _ ->
             val intent = Intent(context, LoadLocalMusicActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
             dialog.dismiss()
         }
         alertDialog.setButton(
             AlertDialog.BUTTON_NEGATIVE,
-            "No"
+            context.getString(R.string.no)
         ) { dialog, _ -> dialog.dismiss() }
         alertDialog.show()
     }
@@ -198,10 +200,19 @@ class MediaHeader @JvmOverloads constructor(
         }
     }
 
-    private fun setUserImage(){
-        Glide.with(this)
-            .load(Uri.parse(AppUser.user_image))
+    fun setUserImage(){
+        Glide.with(MainApplication.getAppContext())
+            .load(AppUser.user_image)
             .circleCrop()
             .into(headerProfileImage)
+            .onLoadFailed(context.getDrawable(R.drawable.ic_baseline_account_circle_24))
+    }
+
+    fun setUserImage(image:String){
+        Glide.with(this)
+            .load(Uri.parse(image))
+            .circleCrop()
+            .into(headerProfileImage)
+            .onLoadFailed(context.getDrawable(R.drawable.ic_baseline_account_circle_24))
     }
 }

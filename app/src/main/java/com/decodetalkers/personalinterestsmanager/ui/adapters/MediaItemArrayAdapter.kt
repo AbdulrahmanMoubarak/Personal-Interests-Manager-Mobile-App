@@ -72,7 +72,7 @@ class MediaItemArrayAdapter(
             itemNameCard.layoutParams.width = 350
 
             if (mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_ARTIST) {
-                MainApplication.getAppContext()?.let {
+                MainApplication.getAppContext().let {
                     Glide.with(it)
                         .load(mediaItem.item_image)
                         .circleCrop()

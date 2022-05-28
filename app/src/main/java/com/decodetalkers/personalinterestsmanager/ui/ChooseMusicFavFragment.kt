@@ -46,7 +46,7 @@ class ChooseMusicFavFragment : Fragment() {
 
         artistProceedButton.setOnClickListener {
             if(selectedItems.size < 3){
-                Toast.makeText(requireContext(), "You have to select at least 3 artists", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.select3Artists), Toast.LENGTH_SHORT).show()
             } else {
                 val bundle = Bundle().apply {
                     putStringArrayList("artistList", selectedItems)

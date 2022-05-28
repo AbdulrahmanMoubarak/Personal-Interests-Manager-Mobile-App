@@ -2,7 +2,9 @@ package com.decodetalkers.personalinterestsmanager.ui
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -15,11 +17,12 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.decodetalkers.myapplication.locatmusicloader.util.Constants.EXTERNAL_STORAGE_ROOT_PATH
+import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.myapplication.locatmusicloader.util.Constants.INTERNAL_STORAGE_ROOT_PATH
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.globalutils.PermissionManager
+import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.locatmusicloader.LocalMusicLoader
 import com.decodetalkers.personalinterestsmanager.models.GenreModel
 import com.decodetalkers.personalinterestsmanager.ui.adapters.FavGenresAdapter
@@ -32,8 +35,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.*
 
-class LoadLocalMusicActivity : AppCompatActivity() {
+class LoadLocalMusicActivity : AppCompatActivity(), ActivityInterface {
+    private val localizationDelegate = LocalizationActivityDelegate(this)
     val recAdapter = FavGenresAdapter(::onItemClick, true)
     private lateinit var homeScreensVM: HomeScreensViewModel
     val recList = arrayListOf<GenreModel>()
@@ -61,12 +66,16 @@ class LoadLocalMusicActivity : AppCompatActivity() {
         setContentView(R.layout.activity_load_local_music)
         supportActionBar?.hide()
 
+        localizationDelegate.addOnLocaleChangedListener(this)
+        localizationDelegate.onCreate()
+
         if (Build.VERSION.SDK_INT >= 23) {
             val window = this.window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = getColor(R.color.black)
         }
 
+        checkAndSetLanguage()
 
         homeScreensVM =
             ViewModelProvider(this).get(HomeScreensViewModel::class.java)
@@ -96,21 +105,21 @@ class LoadLocalMusicActivity : AppCompatActivity() {
     }
 
     private fun uploadMusicData(){
-        showLoadingLayout("Uploading Music Data")
+        showLoadingLayout(getString(R.string.uploadingData))
         CoroutineScope(Dispatchers.IO).launch {
             homeScreensVM.uploadLocalMusicData(AppUser.user_id, selectedItems).collect {
                 withContext(Dispatchers.Main) {
                     if (it) {
                         Toast.makeText(
                             this@LoadLocalMusicActivity,
-                            "Successfully uploaded music data",
+                            getString(R.string.uploadingDataSuc),
                             Toast.LENGTH_SHORT
                         ).show()
                         onBackPressed()
                     } else {
                         Toast.makeText(
                             this@LoadLocalMusicActivity,
-                            "Error uploading music data, please try again",
+                            getString(R.string.uploadingDataFail),
                             Toast.LENGTH_SHORT
                         ).show()
                         onBackPressed()
@@ -135,7 +144,7 @@ class LoadLocalMusicActivity : AppCompatActivity() {
         val z = x.absolutePath.split(":")
         val dirPath = z[1]
         val dir = File("${INTERNAL_STORAGE_ROOT_PATH}/${dirPath}")
-        showLoadingLayout("Loading music from ${dir.name}")
+        showLoadingLayout("${getString(R.string.loadLocalMusicFrom)} ${dir.name}")
         CoroutineScope(Dispatchers.IO).launch {
             LocalMusicLoader().loadAllLocalMusicPaths(dir.absolutePath).collect {
                 withContext(Dispatchers.Main) {
@@ -177,5 +186,56 @@ class LoadLocalMusicActivity : AppCompatActivity() {
     private fun showResultLayout() {
         resultLayout.visibility = View.VISIBLE
         loadingLayout.visibility = View.GONE
+    }
+
+    private fun checkAndSetLanguage(){
+        if(SharedPreferencesManager().getLang() == "ar") {
+            setLanguage("ar")
+            UiManager().setLocale(this, "ar")
+        }
+        else {
+            setLanguage(Locale.ENGLISH)
+            UiManager().setLocale(this, "en")
+        }
+    }
+
+
+    public override fun onResume() {
+        super.onResume()
+        localizationDelegate.onResume(this)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        applyOverrideConfiguration(localizationDelegate.updateConfigurationLocale(newBase))
+        super.attachBaseContext(newBase)
+    }
+
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(super.getResources())
+    }
+
+    override fun setLanguage(language: String?) {
+        localizationDelegate.setLanguage(this, language!!)
+    }
+
+    override fun setLanguage(locale: Locale?) {
+        localizationDelegate.setLanguage(this, locale!!)
+    }
+
+    override fun getCurrentLocale(): Locale {
+        return localizationDelegate.getLanguage(this)
+    }
+
+    val currentLanguage: Locale
+        get() = localizationDelegate.getLanguage(this)
+
+    override fun onAfterLocaleChanged() {
+    }
+
+    override fun onBeforeLocaleChanged() {
     }
 }

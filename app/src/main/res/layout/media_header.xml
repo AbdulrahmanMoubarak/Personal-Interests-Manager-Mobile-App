@@ -86,6 +86,7 @@
             <ImageView
                 android:visibility="visible"
                 android:id="@+id/header_profile"
+                android:transitionName="SharedProfile"
                 android:layout_width="@dimen/mediaHeaderImageSize"
                 android:layout_height="@dimen/mediaHeaderImageSize"
                 android:layout_margin="8dp"

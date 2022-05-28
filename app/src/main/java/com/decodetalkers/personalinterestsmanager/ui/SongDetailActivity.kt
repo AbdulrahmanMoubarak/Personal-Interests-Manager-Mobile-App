@@ -1,7 +1,9 @@
 package com.decodetalkers.personalinterestsmanager.ui
 
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,8 +13,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
+import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.models.SongModel
@@ -28,8 +32,11 @@ import com.google.android.youtube.player.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_song_detail.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
+import java.util.*
+import kotlin.collections.ArrayList
 
-class SongDetailActivity : YouTubeBaseActivity() {
+class SongDetailActivity : YouTubeBaseActivity() , ActivityInterface {
+    private val localizationDelegate = LocalizationActivityDelegate(this)
 
     private lateinit var mSong: SongModel
     private var sectionRecyclerAdapter = SectionRecycler(::loadSongDetailsForActivity)
@@ -41,14 +48,31 @@ class SongDetailActivity : YouTubeBaseActivity() {
         UiManager().setInitialTheme(this)
         setContentView(R.layout.activity_song_detail)
 
+        localizationDelegate.addOnLocaleChangedListener(this)
+        localizationDelegate.onCreate()
+
         if (Build.VERSION.SDK_INT >= 23) {
             val window = this.window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = getColor(R.color.black)
         }
 
+        checkAndSetLanguage()
+
         initViews()
     }
+
+    private fun checkAndSetLanguage(){
+        if(SharedPreferencesManager().getLang() == "ar") {
+            setLanguage("ar")
+            UiManager().setLocale(this, "ar")
+        }
+        else {
+            setLanguage(Locale.ENGLISH)
+            UiManager().setLocale(this, "en")
+        }
+    }
+
 
     private fun initViews() {
         mSong = intent.getSerializableExtra("song_model") as SongModel
@@ -79,6 +103,7 @@ class SongDetailActivity : YouTubeBaseActivity() {
     override fun onResume() {
         super.onResume()
         initYoutubePlayer(mSong.youtube_id)
+        localizationDelegate.onResume(this)
     }
 
     private fun initYoutubePlayer(songYtId: String) {
@@ -246,5 +271,39 @@ class SongDetailActivity : YouTubeBaseActivity() {
     private fun showPlaylistDialog(){
         val plDialog = ChoosePlaylistDialog(this,::getAddSongToPlaylistResult,"music")
         plDialog.show()
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        applyOverrideConfiguration(localizationDelegate.updateConfigurationLocale(newBase))
+        super.attachBaseContext(newBase)
+    }
+
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(super.getResources())
+    }
+
+    override fun setLanguage(language: String?) {
+        localizationDelegate.setLanguage(this, language!!)
+    }
+
+    override fun setLanguage(locale: Locale?) {
+        localizationDelegate.setLanguage(this, locale!!)
+    }
+
+    override fun getCurrentLocale(): Locale {
+        return localizationDelegate.getLanguage(this)
+    }
+
+    val currentLanguage: Locale
+        get() = localizationDelegate.getLanguage(this)
+
+    override fun onAfterLocaleChanged() {
+    }
+
+    override fun onBeforeLocaleChanged() {
     }
 }

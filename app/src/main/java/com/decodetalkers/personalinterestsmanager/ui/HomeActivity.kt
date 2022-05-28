@@ -1,9 +1,10 @@
 package com.decodetalkers.personalinterestsmanager.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,23 +13,27 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.decodetalkers.myapplication.locatmusicloader.util.Constants
+import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.globalutils.PermissionManager
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.activity_home.*
+import java.util.*
 
-class HomeActivity : AppCompatActivity() {
-
+class HomeActivity : AppCompatActivity() , ActivityInterface {
+    private val localizationDelegate = LocalizationActivityDelegate(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         UiManager().setInitialTheme(this)
-
+        localizationDelegate.addOnLocaleChangedListener(this)
+        localizationDelegate.onCreate()
         setContentView(R.layout.activity_home)
         supportActionBar?.hide()
+
+        checkAndSetLanguage()
 
         homeBottomNavigationMenu.itemIconTintList = null
 
@@ -42,6 +47,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.libraryFragment
             )
         )
+
 
         setupActionBarWithNavController(controller, appBarConfiguration)
 
@@ -71,5 +77,53 @@ class HomeActivity : AppCompatActivity() {
         SharedPreferencesManager().setLoaded(HomeScreensViewModel.BOOKS, false)
         SharedPreferencesManager().setLoaded(HomeScreensViewModel.MOVIES, false)
         SharedPreferencesManager().setLoaded(HomeScreensViewModel.MUSIC, false)
+    }
+
+
+    private fun checkAndSetLanguage(){
+        if(SharedPreferencesManager().getLang() == "ar") {
+            setLanguage("ar")
+        }
+        else {
+            setLanguage(Locale.ENGLISH)
+        }
+    }
+    public override fun onResume() {
+        super.onResume()
+        localizationDelegate.onResume(this)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        applyOverrideConfiguration(localizationDelegate.updateConfigurationLocale(newBase))
+        super.attachBaseContext(newBase)
+    }
+
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(super.getResources())
+    }
+
+    override fun setLanguage(language: String?) {
+        localizationDelegate.setLanguage(this, language!!)
+    }
+
+    override fun setLanguage(locale: Locale?) {
+        localizationDelegate.setLanguage(this, locale!!)
+    }
+
+    override fun getCurrentLocale(): Locale {
+        return localizationDelegate.getLanguage(this)
+    }
+
+    val currentLanguage: Locale
+        get() = localizationDelegate.getLanguage(this)
+
+    override fun onAfterLocaleChanged() {
+    }
+
+    override fun onBeforeLocaleChanged() {
     }
 }
