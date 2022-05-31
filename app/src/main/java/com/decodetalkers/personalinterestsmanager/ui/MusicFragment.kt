@@ -18,6 +18,7 @@ import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
+import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.android.synthetic.main.fragment_music.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,6 +57,8 @@ class MusicFragment : Fragment() {
             loadSections(true)
             swipeRefreshMusic.isRefreshing = false
         }
+
+        titleCardMusic.setUserImage(AppUser.user_image)
     }
 
     private fun loadSections(reload: Boolean) {

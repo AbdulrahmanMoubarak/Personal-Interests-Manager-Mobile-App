@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
+class MovieDetailActivity : YouTubeBaseActivity(), ActivityInterface {
     private val localizationDelegate = LocalizationActivityDelegate(this)
     private lateinit var mMovie: MovieModel
 
@@ -73,20 +73,39 @@ class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
         mMovie = intent.getSerializableExtra("movie_model") as MovieModel
         movie_detail_title.text = mMovie.title
         movie_detail_desc.text = mMovie.overview
-        movie_detail_status.text = mMovie.status
+        movie_detail_status.text =
+            if (mMovie.status == "Released") getString(R.string.released)
+            else if (mMovie.status == "Post Production") getString(R.string.postproduction)
+            else if (mMovie.status == "Planned") getString(R.string.planned) else ""
         movie_detail_releaseDate.text =
             if (mMovie.release_date != "None" && mMovie.release_date != "Unknown") mMovie.release_date else mMovie.status
         movie_detail_image.animation = AnimationUtils.loadAnimation(this, R.anim.scale_animation)
         movie_detail_image.load(MOVIE_IMAGE_LINK_M + mMovie.poster)
-        movie_detail_background.load(MOVIE_IMAGE_LINK_L + mMovie.background) {
-            crossfade(true)
-            crossfade(300)
+        if (mMovie.background != "") {
+            movie_detail_background.load(MOVIE_IMAGE_LINK_L + mMovie.background) {
+                crossfade(true)
+                crossfade(300)
+            }
+        } else {
+            movie_detail_background.visibility = View.GONE
+            movie_detail_background_grad.visibility = View.GONE
         }
-        movie_detail_imagel_genres.text = mMovie.genres.replace("|", "  ")
-        movie_detail_prod_comp.text = mMovie.production_company.replace("|", "  ")
+
+        if (mMovie.genres == "")
+            genres_card.visibility = View.GONE
+        else
+            movie_detail_imagel_genres.text = mMovie.genres.replace("|", "  ")
+        if (mMovie.production_company == "")
+            movie_detail_prod_comp.text = getString(R.string.unknown)
+        else
+            movie_detail_prod_comp.text = mMovie.production_company.replace("|", "  ")
         movie_detail_vote_average.text = mMovie.vote_average.toString()
         movie_detail_vote_count.text = mMovie.vote_count.toString()
-        initYoutubePlayer(mMovie.trailer)
+
+        if (mMovie.trailer == "")
+            trailer_card.visibility = View.GONE
+        else
+            initYoutubePlayer(mMovie.trailer)
         loadMovieCast(mMovie.movie_id)
         loadMovieRecommendation(mMovie.movie_id)
 
@@ -102,7 +121,7 @@ class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
             startActivity(i)
         }
 
-        if(mMovie.user_rating != -1F){
+        if (mMovie.user_rating != -1F) {
             movieDetail_ButtonRating.setImageResource(R.drawable.ic_user_rating)
             movie_detail_user_rating.visibility = View.VISIBLE
             movie_detail_user_rating.text = mMovie.user_rating.times(2).toString()
@@ -201,7 +220,9 @@ class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
     }
 
     private fun getMovieById(movieId: String) = flow {
-        val response = RetrofitBuilder.pimApiService.getMovieById(movieId.toInt(), AppUser.user_id.toString()).body() as MovieModel
+        val response =
+            RetrofitBuilder.pimApiService.getMovieById(movieId.toInt(), AppUser.user_id.toString())
+                .body() as MovieModel
         emit(response)
     }
 
@@ -232,15 +253,23 @@ class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
             addMovieRating(AppUser.user_id, mMovie.movie_id, rating).collect {
                 Log.d("rating", "onRating: rating added")
                 withContext(Dispatchers.Main) {
-                    if(it == 200) {
-                        Toast.makeText(this@MovieDetailActivity, "Rating Added", Toast.LENGTH_SHORT)
+                    if (it == 200) {
+                        Toast.makeText(
+                            this@MovieDetailActivity,
+                            getString(R.string.ratingAdded),
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                         movieDetail_ButtonRating.setImageResource(R.drawable.ic_user_rating)
                         movieDetail_ButtonRating.isClickable = false
                         movie_detail_user_rating.visibility = View.VISIBLE
                         movie_detail_user_rating.text = rating.times(2).toString()
                     } else {
-                        Toast.makeText(this@MovieDetailActivity, "Error adding rating", Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            this@MovieDetailActivity,
+                            getString(R.string.ratingError),
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                     }
                 }
@@ -255,13 +284,13 @@ class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
                     if (it) {
                         Toast.makeText(
                             this@MovieDetailActivity,
-                            "Successfully added ${mMovie.title}",
+                            "${getString(R.string.successAdd)} ${mMovie.title}",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
                         Toast.makeText(
                             this@MovieDetailActivity,
-                            "Failed to add ${mMovie.title}, please try again",
+                            "${getString(R.string.failedAdd)} ${mMovie.title}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -275,7 +304,7 @@ class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
             playlistId,
             mMovie.movie_id.toString(),
             mMovie.title,
-            MOVIE_IMAGE_LINK_M+mMovie.poster
+            MOVIE_IMAGE_LINK_M + mMovie.poster
         )
         if (response.code() == 200) {
             emit(true)
@@ -284,8 +313,8 @@ class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
         }
     }
 
-    private fun showPlaylistDialog(){
-        val plDialog = ChoosePlaylistDialog(this,::getAddMovieToPlaylistResult,"movies")
+    private fun showPlaylistDialog() {
+        val plDialog = ChoosePlaylistDialog(this, ::getAddMovieToPlaylistResult, "movies")
         plDialog.show()
     }
 
@@ -328,12 +357,11 @@ class MovieDetailActivity : YouTubeBaseActivity() , ActivityInterface {
     override fun onBeforeLocaleChanged() {
     }
 
-    private fun checkAndSetLanguage(){
-        if(SharedPreferencesManager().getLang() == "ar") {
+    private fun checkAndSetLanguage() {
+        if (SharedPreferencesManager().getLang() == "ar") {
             setLanguage("ar")
             UiManager().setLocale(this, "ar")
-        }
-        else {
+        } else {
             setLanguage(Locale.ENGLISH)
             UiManager().setLocale(this, "en")
         }

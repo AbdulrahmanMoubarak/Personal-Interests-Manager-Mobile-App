@@ -11,7 +11,7 @@
         android:background="#444"
         app:cardCornerRadius="20dp"
         app:cardElevation="5dp"
-        app:cardUseCompatPadding="true"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/media_item_image"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintVertical_bias="0.0"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/media_item_name"

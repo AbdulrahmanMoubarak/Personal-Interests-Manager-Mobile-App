@@ -57,6 +57,7 @@ class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: St
                 crossfade(true)
                 crossfade(500)
             }
+            holder.itemNameCard.visibility = View.GONE
         } else {
 
             if (Item_List.get(position).item_type.lowercase() == TYPE_ALBUM) {

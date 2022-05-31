@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.bumptech.glide.Glide
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
@@ -201,18 +203,14 @@ class MediaHeader @JvmOverloads constructor(
     }
 
     fun setUserImage(){
-        Glide.with(MainApplication.getAppContext())
-            .load(AppUser.user_image)
-            .circleCrop()
-            .into(headerProfileImage)
-            .onLoadFailed(context.getDrawable(R.drawable.ic_baseline_account_circle_24))
+        headerProfileImage.load(Uri.parse(AppUser.user_image)){
+            transformations(CircleCropTransformation())
+        }
     }
 
     fun setUserImage(image:String){
-        Glide.with(this)
-            .load(Uri.parse(image))
-            .circleCrop()
-            .into(headerProfileImage)
-            .onLoadFailed(context.getDrawable(R.drawable.ic_baseline_account_circle_24))
+        headerProfileImage.load(Uri.parse(image)){
+            transformations(CircleCropTransformation())
+        }
     }
 }

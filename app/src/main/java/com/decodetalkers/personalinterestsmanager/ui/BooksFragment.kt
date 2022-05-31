@@ -18,6 +18,7 @@ import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.fragment_books.*
+import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 
@@ -53,6 +54,8 @@ class BooksFragment : Fragment() {
             loadSections(true)
             swipeRefreshBooks.isRefreshing = false
         }
+
+        titleCardBooks.setUserImage(AppUser.user_image)
     }
 
     private fun loadSections(reload: Boolean) {

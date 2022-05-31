@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.ChatbotActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.ProfileSettingsActivity"
             android:exported="false" />
         <activity

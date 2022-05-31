@@ -1,12 +1,13 @@
 package com.decodetalkers.personalinterestsmanager.retrofit
 
+import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.models.*
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
 
-interface RetrofitPimApi {
+interface   RetrofitPimApi {
 
     @FormUrlEncoded
     @POST("/register")
@@ -66,23 +67,27 @@ interface RetrofitPimApi {
 
     @GET("/movies/search")
     suspend fun getMoviesSearchResults(
-        @Query("name") name: String
+        @Query("name") name: String,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<MediaItemOfListModel>>
 
     @GET("/movies/search")
     suspend fun getMovieById(
         @Query("id") id: Int,
-        @Query("userId") userId: String
+        @Query("userId") userId: String,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<MovieModel>
 
     @GET("/movies/main")
     suspend fun getMoviesHomeResults(
-        @Query("userId") userId: Int
+        @Query("userId") userId: Int,
+        @Query("lang") language: String? = SharedPreferencesManager().getLang()
     ): Response<List<SectionModel>>
 
     @GET("/movies/credits")
     suspend fun getMovieCastById(
-        @Query("movieId") movieId: Int
+        @Query("movieId") movieId: Int,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<MediaItemOfListModel>>
 
     @FormUrlEncoded
@@ -96,27 +101,32 @@ interface RetrofitPimApi {
     @GET("/movies/movie-based-recommendation")
     suspend fun getMovieBasedRecommendation(
         @Query("movieId") movieId: Int,
-        @Query("userId") userId: Int
+        @Query("userId") userId: Int,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<SectionModel>>
 
     @GET("/music/main")
     suspend fun getMusicHomeResults(
-        @Query("userId") userId: Int
+        @Query("userId") userId: Int,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<SectionModel>>
 
     @GET("/music/search")
     suspend fun getSongById(
-        @Query("id") id: String
+        @Query("id") id: String,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<SongModel>
 
     @GET("/music/search")
     suspend fun searchForSong(
-        @Query("query") query: String
+        @Query("query") query: String,
+        @Query("lang") language: String? = SharedPreferencesManager().getLang()
     ): Response<List<MediaItemOfListModel>>
 
     @GET("/music/song-based-recommendation")
     suspend fun getSongBasedRecommendation(
-        @Query("songId") songId: String
+        @Query("songId") songId: String,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<SectionModel>>
 
     @FormUrlEncoded
@@ -128,18 +138,21 @@ interface RetrofitPimApi {
 
     @GET("/books/main")
     suspend fun getBooksHomeResults(
-        @Query("userId") userId: Int
+        @Query("userId") userId: Int,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<SectionModel>>
 
     @GET("/books/search")
     suspend fun getBooksSearchResults(
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<MediaItemOfListModel>>
 
     @GET("/books/search")
     suspend fun getBookById(
         @Query("id") bookId: String,
-        @Query("userId") userId: Int
+        @Query("userId") userId: Int,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<BookModel>
 
     @FormUrlEncoded
@@ -153,12 +166,14 @@ interface RetrofitPimApi {
 
     @GET("/books/book-based-recommendation")
     suspend fun getBookBasedRecommendation(
-        @Query("bookId") bookId: String
+        @Query("bookId") bookId: String,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<SectionModel>>
 
     @GET("/movies/main/sections")
     suspend fun getMoviesSectionNames(
-        @Query("userId") userId: Int
+        @Query("userId") userId: Int,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<MutableMap<String, String>>>
 
     @GET("/movies/main/sections/content")
@@ -167,6 +182,7 @@ interface RetrofitPimApi {
         @Query("userId") userId: Int? = null,
         @Query("year") year: Int? = null,
         @Query("genre") genre: Int? = null,
+        @Query("lang") language: String = SharedPreferencesManager().getLang().toString()
     ): Response<List<MediaItemOfListModel>>
 
     @GET("/music/top-artists")

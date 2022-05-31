@@ -26,6 +26,9 @@ class HomeScreensViewModel : ViewModel() {
         var isBooksLoaded = false
 
         private var moviesSections: MutableList<SectionModel> = mutableListOf()
+        fun clearMoviesSections(){
+            moviesSections.clear()
+        }
         private lateinit var musicSections: List<SectionModel>
         private lateinit var booksSections: List<SectionModel>
     }

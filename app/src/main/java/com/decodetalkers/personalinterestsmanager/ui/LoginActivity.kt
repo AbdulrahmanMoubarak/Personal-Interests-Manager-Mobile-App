@@ -79,7 +79,7 @@ class LoginActivity : AppCompatActivity(), ActivityInterface {
             } else {
                 Toast.makeText(
                     this@LoginActivity,
-                    "You have to enter proper data",
+                    getString(R.string.enterProperData),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -98,7 +98,7 @@ class LoginActivity : AppCompatActivity(), ActivityInterface {
             } else {
                 Toast.makeText(
                     this@LoginActivity,
-                    "You have to enter proper data",
+                    getString(R.string.enterProperData),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -194,7 +194,7 @@ class LoginActivity : AppCompatActivity(), ActivityInterface {
                         UiManager().setProgressBarState(login_progress, false)
                         Toast.makeText(
                             this@LoginActivity,
-                            "Email already exists",
+                            getString(R.string.emailAlreadyExists),
                             Toast.LENGTH_SHORT
                         ).show()
                     }

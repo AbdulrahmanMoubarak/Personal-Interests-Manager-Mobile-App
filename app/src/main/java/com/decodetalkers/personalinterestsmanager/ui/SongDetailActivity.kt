@@ -155,7 +155,7 @@ class SongDetailActivity : YouTubeBaseActivity() , ActivityInterface {
                 )
             )
         }
-        return arrayListOf(SectionModel("Song Artists", artistList))
+        return arrayListOf(SectionModel(getString(R.string.songArtists), artistList))
     }
 
     private fun loadSongRecommendation(songId: String) {

@@ -61,6 +61,9 @@ class MediaItemArrayAdapter(
                 crossfade(true)
                 crossfade(500)
             }
+            if(mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_MOVIE){
+                itemNameCard.visibility = View.GONE
+            }
         } else {
 
             if (mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_ALBUM) {

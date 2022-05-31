@@ -18,6 +18,7 @@ import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
+import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.activity_profile_settings.*
 import java.util.*
 
@@ -68,6 +69,10 @@ class ProfileSettingsActivity : AppCompatActivity(), ActivityInterface {
                 SharedPreferencesManager().setLang("en")
             }
             val i = Intent(this, HomeActivity::class.java)
+            HomeScreensViewModel.isMoviesLoaded = false
+            HomeScreensViewModel.isMusicLoaded = false
+            HomeScreensViewModel.isBooksLoaded = false
+            HomeScreensViewModel.clearMoviesSections()
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(i)
         }

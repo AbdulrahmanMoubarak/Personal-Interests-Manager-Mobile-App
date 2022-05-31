@@ -77,4 +77,12 @@
     <string name="uploadingDataSuc">Successfully uploaded music data</string>
     <string name="uploadingDataFail">Error uploading music data, please try again</string>
     <string name="loadLocalMusicFrom">Loading music from</string>
+    <string name="unknown">Unknown</string>
+    <string name="songArtists">Song Artists</string>
+    <string name="enterProperData">You have to enter valid data</string>
+    <string name="emailAlreadyExists">Email already exists</string>
+    <string name="released">Released</string>
+    <string name="postproduction">Post Production</string>
+    <string name="planned">Planned</string>
+    <string name="typeMessage">"Type a message "</string>
 </resources>
