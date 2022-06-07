@@ -8,17 +8,28 @@
     tools:context=".ui.ChatbotActivity"
     android:background="?MainScreenBg">
 
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.25"
+        android:src="@drawable/ic_bg_multiple_icons_v2"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/appCompatEditText"
+        app:layout_constraintBottom_toTopOf="@+id/msgEditText"
         app:layout_constraintTop_toTopOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:clipToPadding="false"
         android:orientation="vertical"
         android:overScrollMode="never"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_marginBottom="8dp"/>
 
     <FrameLayout
@@ -39,7 +50,7 @@
     </FrameLayout>
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/appCompatEditText"
+        android:id="@+id/msgEditText"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"

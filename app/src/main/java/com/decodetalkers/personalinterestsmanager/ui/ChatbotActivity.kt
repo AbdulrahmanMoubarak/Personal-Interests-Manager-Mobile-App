@@ -9,11 +9,15 @@ import android.view.WindowManager
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
+import com.decodetalkers.personalinterestsmanager.models.ChatMessageModel
+import com.decodetalkers.personalinterestsmanager.ui.adapters.ChatAdapter
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
+import kotlinx.android.synthetic.main.activity_chatbot.*
 import java.util.*
 
-class ChatbotActivity : AppCompatActivity() , ActivityInterface{
+class ChatbotActivity : AppCompatActivity(), ActivityInterface {
     private val localizationDelegate = LocalizationActivityDelegate(this)
+    private val recAdapter = ChatAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         localizationDelegate.addOnLocaleChangedListener(this)
@@ -27,16 +31,42 @@ class ChatbotActivity : AppCompatActivity() , ActivityInterface{
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = getColor(R.color.black)
         }
+
+        setupMessageRecycler()
+
+        chat_send.setOnClickListener {
+            if (msgEditText.text.toString() != "") {
+                (chatRecycler.adapter as ChatAdapter).addNewMessage(
+                    ChatMessageModel(
+                        0,
+                        msgEditText.text.toString(),
+                        false
+                    )
+                )
+                (chatRecycler.adapter as ChatAdapter).addNewMessage(
+                    ChatMessageModel(
+                        1,
+                        "لااااااع أوعى يا زمزم مش انا اللي يتقالي اذهب ل الجحيم يا بكر بيييه",
+                        true
+                    )
+                )
+                msgEditText.text?.clear()
+            }
+        }
     }
 
-    private fun checkAndSetLanguage(){
-        if(SharedPreferencesManager().getLang() == "ar") {
+    private fun setupMessageRecycler() {
+        chatRecycler.adapter = recAdapter
+    }
+
+    private fun checkAndSetLanguage() {
+        if (SharedPreferencesManager().getLang() == "ar") {
             setLanguage("ar")
-        }
-        else {
+        } else {
             setLanguage(Locale.ENGLISH)
         }
     }
+
     public override fun onResume() {
         super.onResume()
         localizationDelegate.onResume(this)

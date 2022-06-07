@@ -13,7 +13,7 @@
         <item name="colorProgress">#C44</item>
         <item name="inputTextColor">@color/colorGray</item>
         <item name="hintTextColor">@color/colorAccent</item>
-        <item name="loginButtonColor">#007FFF</item>
+        <item name="loginButtonColor">#C70200</item>
         <item name="loginButtonTextColor">#FFBD00</item>
         <item name="BottomMenuBgColor">@color/white</item>
         <item name="BottomMenuTextColor">@color/black</item>
@@ -23,7 +23,7 @@
         <item name="HeaderIcons">@color/black</item>
         <item name="MusicMiniPlayerColor">#FF8D00</item>
         <item name="MusicMiniPlayerButtonColor">#F73974</item>
-        <item name="LogoColor">#007FFF</item>
+        <item name="LogoColor">#C70200</item>
         <item name="MediaCircle">#504AEF</item>
         <item name="MediaCircleShade">#413BDD</item>
         <item name="MovieBottomMenu">#324A5E</item>
@@ -64,7 +64,7 @@
         <item name="HeaderIcons">#FF8D00</item>
         <item name="MusicMiniPlayerColor">#0B03A0</item>
         <item name="MusicMiniPlayerButtonColor">#FF8D00</item>
-        <item name="LogoColor">#fff</item>
+        <item name="LogoColor">#FF8D00</item>
         <item name="MediaCircle">#FF8D00</item>
         <item name="MediaCircleShade">#FF6D00</item>
 

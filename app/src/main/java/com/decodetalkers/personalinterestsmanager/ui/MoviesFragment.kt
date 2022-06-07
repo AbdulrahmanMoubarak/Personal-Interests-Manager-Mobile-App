@@ -53,10 +53,7 @@ class MoviesFragment : Fragment() {
         }
 
         titleCardMovies.setUserImage(AppUser.user_image)
-    }
 
-    override fun onStart() {
-        super.onStart()
         loadSectionsAsync(false)
     }
 

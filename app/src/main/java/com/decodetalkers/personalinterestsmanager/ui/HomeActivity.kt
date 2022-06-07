@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import coil.load
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.globalutils.PermissionManager
@@ -48,6 +49,8 @@ class HomeActivity : AppCompatActivity() , ActivityInterface {
                 R.id.libraryFragment
             )
         )
+
+
 
 
         setupActionBarWithNavController(controller, appBarConfiguration)

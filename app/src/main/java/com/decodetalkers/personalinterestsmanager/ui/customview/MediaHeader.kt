@@ -45,6 +45,7 @@ class MediaHeader @JvmOverloads constructor(
     private var headerImage: ImageView
     private var headerProfileImage: ImageView
     private var headerBookstore: ImageView
+    private var headerCinemas: ImageView
     private var headerLocalMusic: ImageView
     private var headerTitle: TextView
     private lateinit var mediaType: String
@@ -58,6 +59,7 @@ class MediaHeader @JvmOverloads constructor(
         headerProfileImage = viewItem.header_profile
         headerTitle = viewItem.txt_title
         headerBookstore = viewItem.bookstoresButton
+        headerCinemas = viewItem.cinemasButton
         headerLocalMusic = viewItem.localMusicButton
 
         setUserImage()
@@ -89,7 +91,6 @@ class MediaHeader @JvmOverloads constructor(
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
-
         })
     }
 
@@ -97,19 +98,23 @@ class MediaHeader @JvmOverloads constructor(
         mediaType = headerType
         when (headerType) {
             HEADER_MOVIES -> {
-                headerTitle.text = MainApplication.getAppContext()?.getText(R.string.movies)
+                headerTitle.text = MainApplication.getAppContext().getText(R.string.movies)
                 headerImage.setImageResource(R.drawable.ic_movie_circle_svg)
+                headerCinemas.visibility = View.VISIBLE
+                headerCinemas.setOnClickListener {
+                    findNearestPlaces("cinemas")
+                }
             }
             HEADER_BOOKS -> {
-                headerTitle.text = MainApplication.getAppContext()?.getText(R.string.books)
+                headerTitle.text = MainApplication.getAppContext().getText(R.string.books)
                 headerImage.setImageResource(R.drawable.ic_book_circle_svgr)
                 headerBookstore.visibility = View.VISIBLE
                 headerBookstore.setOnClickListener {
-                    findNearestBookstores()
+                    findNearestPlaces("bookstores")
                 }
             }
             HEADER_MUSIC -> {
-                headerTitle.text = MainApplication.getAppContext()?.getText(R.string.music)
+                headerTitle.text = MainApplication.getAppContext().getText(R.string.music)
                 headerImage.setImageResource(R.drawable.ic_music_circle_svg)
                 headerLocalMusic.visibility = View.VISIBLE
                 headerLocalMusic.setOnClickListener {
@@ -118,13 +123,13 @@ class MediaHeader @JvmOverloads constructor(
 
             }
             HEADER_LIBRARY -> {
-                headerTitle.text = MainApplication.getAppContext()?.getText(R.string.library)
+                headerTitle.text = MainApplication.getAppContext().getText(R.string.library)
                 headerImage.setImageResource(R.drawable.ic_library2)
             }
         }
     }
 
-    private fun findNearestBookstores() {
+    private fun findNearestPlaces(place: String) {
         val loc = getUserLocation()
         if (loc.latitude == -1000000.0) {
             val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
@@ -137,7 +142,7 @@ class MediaHeader @JvmOverloads constructor(
             alertDialog.show()
         } else {
             val gmmIntentUri =
-                Uri.parse("geo:${loc.latitude},${loc.longitude}?&q=nearby bookstores")
+                Uri.parse("geo:${loc.latitude},${loc.longitude}?&q=nearby ${place}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)

@@ -9,19 +9,24 @@
 
         android:visibility="visible"
         android:id="@+id/titleCard"
-        app:cardElevation="5dp"
-        android:elevation="5dp"
+        app:cardElevation="10dp"
+        android:elevation="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:dividerHeight="0.0px"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:background="?attr/HeaderBg"
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <ImageView
                 android:visibility="gone"
@@ -34,14 +39,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <TextView
                 android:id="@+id/txt_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_marginVertical="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:text="@string/movies"
-                android:textColor="?attr/HeaderText"
+                android:textColor="?attr/LogoColor"
                 android:textSize="@dimen/mediaHeaderTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -56,6 +61,18 @@
                 android:layout_height="@dimen/mediaHeaderImageSize"
                 android:layout_margin="8dp"
                 android:src="@drawable/ic_bookstore_book_shop_book_publisher_svgrepo_com__1_"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/header_searchIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/cinemasButton"
+                android:visibility="gone"
+                android:layout_width="@dimen/mediaHeaderImageSize"
+                android:layout_height="@dimen/mediaHeaderImageSize"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_cinema_svgrepo_com"
+                app:tint="?attr/HeaderIcons"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/header_searchIcon"
                 app:layout_constraintTop_toTopOf="parent" />
