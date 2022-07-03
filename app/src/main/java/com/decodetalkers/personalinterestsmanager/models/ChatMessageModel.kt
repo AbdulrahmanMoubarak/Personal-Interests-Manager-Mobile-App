@@ -2,6 +2,6 @@ package com.decodetalkers.personalinterestsmanager.models
 
 data class ChatMessageModel (
     var messageId: Int,
-    var Message: String,
+    var message: String,
     var isChatbotMessage: Boolean
 )

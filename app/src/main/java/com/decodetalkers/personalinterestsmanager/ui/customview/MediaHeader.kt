@@ -142,7 +142,7 @@ class MediaHeader @JvmOverloads constructor(
             alertDialog.show()
         } else {
             val gmmIntentUri =
-                Uri.parse("geo:${loc.latitude},${loc.longitude}?&q=nearby ${place}")
+                Uri.parse("geo:${loc.latitude},${loc.longitude}?z=300&q=nearby ${place}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)

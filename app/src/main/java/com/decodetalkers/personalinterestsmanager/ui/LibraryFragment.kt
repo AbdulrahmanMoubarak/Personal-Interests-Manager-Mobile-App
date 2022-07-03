@@ -12,19 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
-import com.decodetalkers.personalinterestsmanager.ui.adapters.FavArtistAdapter
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler
 import com.decodetalkers.personalinterestsmanager.ui.adapters.PlaylistAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.customview.PlaylistDialogue
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
-import kotlinx.android.synthetic.main.fragment_choose_music_fav.*
 import kotlinx.android.synthetic.main.fragment_library.*
-import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

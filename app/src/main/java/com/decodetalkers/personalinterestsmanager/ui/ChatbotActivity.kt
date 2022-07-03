@@ -6,18 +6,27 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.lifecycle.ViewModelProvider
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.models.ChatMessageModel
 import com.decodetalkers.personalinterestsmanager.ui.adapters.ChatAdapter
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
+import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.activity_chatbot.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class ChatbotActivity : AppCompatActivity(), ActivityInterface {
+    private lateinit var homeScreensVM: HomeScreensViewModel
     private val localizationDelegate = LocalizationActivityDelegate(this)
     private val recAdapter = ChatAdapter()
+    private val curMsgId: Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         localizationDelegate.addOnLocaleChangedListener(this)
@@ -32,24 +41,29 @@ class ChatbotActivity : AppCompatActivity(), ActivityInterface {
             window.statusBarColor = getColor(R.color.black)
         }
 
+        homeScreensVM =
+            ViewModelProvider(this).get(HomeScreensViewModel::class.java)
+
         setupMessageRecycler()
 
         chat_send.setOnClickListener {
             if (msgEditText.text.toString() != "") {
                 (chatRecycler.adapter as ChatAdapter).addNewMessage(
                     ChatMessageModel(
-                        0,
+                        curMsgId + 1,
                         msgEditText.text.toString(),
                         false
                     )
                 )
-                (chatRecycler.adapter as ChatAdapter).addNewMessage(
-                    ChatMessageModel(
-                        1,
-                        "لااااااع أوعى يا زمزم مش انا اللي يتقالي اذهب ل الجحيم يا بكر بيييه",
-                        true
-                    )
-                )
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    homeScreensVM.getChatbotReply(curMsgId + 1, msgEditText.text.toString())
+                        .collect {
+                            withContext(Dispatchers.Main) {
+                                (chatRecycler.adapter as ChatAdapter).addNewMessage(it)
+                            }
+                        }
+                }
                 msgEditText.text?.clear()
             }
         }

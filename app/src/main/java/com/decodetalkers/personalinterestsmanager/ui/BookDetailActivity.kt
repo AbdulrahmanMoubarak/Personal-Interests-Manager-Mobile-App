@@ -21,13 +21,12 @@ import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.models.BookModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
-import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.ChoosePlaylistDialog
 import com.decodetalkers.personalinterestsmanager.ui.customview.RatingDialogue
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.activity_book_detail.*
-import kotlinx.android.synthetic.main.activity_movie_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +35,7 @@ import java.util.*
 
 class BookDetailActivity : AppCompatActivity() , ActivityInterface {
     private lateinit var mBook: BookModel
-    private var sectionRecyclerAdapter = SectionRecycler(::loadBookDetailsForActivity)
+    private var sectionRecyclerAdapter = SectionAdapter(::loadBookDetailsForActivity)
     private lateinit var homeScreensVM: HomeScreensViewModel
     private val localizationDelegate = LocalizationActivityDelegate(this)
 

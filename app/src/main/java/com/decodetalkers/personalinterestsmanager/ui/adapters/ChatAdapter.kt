@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.decodetalkers.personalinterestsmanager.R
-import com.decodetalkers.personalinterestsmanager.databinding.ContainerSendMessageBinding
 import com.decodetalkers.personalinterestsmanager.models.ChatMessageModel
 import kotlinx.android.synthetic.main.container_received_message.view.*
 import kotlinx.android.synthetic.main.container_send_message.view.*
@@ -19,14 +18,14 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class ChatSentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun setData(msg: ChatMessageModel) {
-            itemView.chatSentText.text = msg.Message
+            itemView.chatSentText.text = msg.message
         }
     }
 
     class ChatReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun setData(msg: ChatMessageModel) {
-            itemView.chatReceivedText.text = msg.Message
+            itemView.chatReceivedText.text = msg.message
         }
     }
 

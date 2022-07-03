@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ListAdapter
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,10 +13,9 @@ import com.bumptech.glide.Glide
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.radioalarm.application.MainApplication
-import java.lang.Exception
 
-class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: String) -> Unit) :
-    RecyclerView.Adapter<MediaItemRecycler.MediaItemViewHolder>() {
+class MediaItemAdapter(var onClick: (itemId: String, image: ImageView, type: String) -> Unit) :
+    RecyclerView.Adapter<MediaItemAdapter.MediaItemViewHolder>() {
     private var Item_List :List<MediaItemOfListModel> = arrayListOf()
 
     companion object {
@@ -42,7 +40,7 @@ class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: St
         holder.itemName.text = Item_List.get(position).item_name
 
         if (Item_List.get(position).item_type.lowercase() == TYPE_CAST_MEMBER) {
-            holder.itemRole.visibility = View.VISIBLE
+            //holder.itemRole.visibility = View.VISIBLE
             holder.itemRole.text = Item_List.get(position).item_id
 
             holder.itemImage.layoutParams.height = 350
@@ -57,7 +55,9 @@ class MediaItemRecycler(var onClick: (itemId: String, image: ImageView, type: St
                 crossfade(true)
                 crossfade(500)
             }
-            holder.itemNameCard.visibility = View.GONE
+            if(Item_List.get(position).item_type.lowercase() == TYPE_MOVIE){
+                holder.itemNameCard.visibility = View.GONE
+            }
         } else {
 
             if (Item_List.get(position).item_type.lowercase() == TYPE_ALBUM) {

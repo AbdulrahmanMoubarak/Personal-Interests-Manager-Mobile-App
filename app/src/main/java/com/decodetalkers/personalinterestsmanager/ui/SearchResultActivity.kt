@@ -15,13 +15,12 @@ import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemArrayAdapter
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler
+import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader.Companion.HEADER_BOOKS
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader.Companion.HEADER_MOVIES
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader.Companion.HEADER_MUSIC
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
-import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.activity_search_result.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -138,7 +137,7 @@ class SearchResultActivity : AppCompatActivity() , ActivityInterface {
     }
 
     private fun loadSongDetailsForActivity(songId: String, songImageView: ImageView, type:String = "") {
-        if(type != MediaItemRecycler.TYPE_ARTIST) {
+        if(type != MediaItemAdapter.TYPE_ARTIST) {
             UiManager().setProgressBarState(search_progress, true)
             CoroutineScope(Dispatchers.IO).launch {
                 homeScreensVM.getSongById(songId).collect {

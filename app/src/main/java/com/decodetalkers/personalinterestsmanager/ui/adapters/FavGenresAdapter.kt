@@ -83,7 +83,7 @@ class FavGenresAdapter(var onClick: (itemId: String) -> Unit, var allSelected: B
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (packageInfo.applicationInfo.theme == R.style.Theme_PersonalInterestsManagerPrimary)
                         holder.itemView.setBackgroundColor(
-                            MainApplication.getApplication().getColor(R.color.white)
+                            MainApplication.getApplication().getColor(R.color.darkGray)
                         )
                     else if (packageInfo.applicationInfo.theme == R.style.Theme_PersonalInterestsManagerDark)
                         holder.itemView.setBackgroundColor(

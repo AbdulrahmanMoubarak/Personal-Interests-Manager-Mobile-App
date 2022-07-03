@@ -13,19 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
-import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.fragment_books.*
-import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 
 
 class BooksFragment : Fragment() {
 
-    private var sectionRecyclerAdapter = SectionRecycler(::loadBookDetailsForActivity)
+    private var sectionRecyclerAdapter = SectionAdapter(::loadBookDetailsForActivity)
     private lateinit var homeScreensVM: HomeScreensViewModel
     private lateinit var cJob: Job
 

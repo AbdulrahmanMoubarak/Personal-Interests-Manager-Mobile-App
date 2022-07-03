@@ -83,9 +83,9 @@ class HomeActivity : AppCompatActivity() , ActivityInterface {
 
     override fun onDestroy() {
         super.onDestroy()
-        SharedPreferencesManager().setLoaded(HomeScreensViewModel.BOOKS, false)
-        SharedPreferencesManager().setLoaded(HomeScreensViewModel.MOVIES, false)
-        SharedPreferencesManager().setLoaded(HomeScreensViewModel.MUSIC, false)
+//        SharedPreferencesManager().setLoaded(HomeScreensViewModel.BOOKS, false)
+//        SharedPreferencesManager().setLoaded(HomeScreensViewModel.MOVIES, false)
+//        SharedPreferencesManager().setLoaded(HomeScreensViewModel.MUSIC, false)
     }
 
 

@@ -13,18 +13,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
-import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.fragment_movies.*
-import kotlinx.coroutines.flow.collect
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import kotlinx.coroutines.*
 
 class MoviesFragment : Fragment() {
 
-    private var sectionRecyclerAdapter = SectionRecycler(::loadMovieDetailsForActivity)
+    private var sectionRecyclerAdapter = SectionAdapter(::loadMovieDetailsForActivity)
     private lateinit var homeScreensVM: HomeScreensViewModel
     private lateinit var cJob: Job
 

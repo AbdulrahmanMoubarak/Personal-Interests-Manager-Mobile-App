@@ -24,11 +24,11 @@ import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.personalinterestsmanager.models.MovieModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.MOVIE_IMAGE_LINK_L
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.MOVIE_IMAGE_LINK_M
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.TYPE_CAST_MEMBER
-import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemAdapter
+import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemAdapter.Companion.MOVIE_IMAGE_LINK_L
+import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemAdapter.Companion.MOVIE_IMAGE_LINK_M
+import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemAdapter.Companion.TYPE_CAST_MEMBER
+import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.ChoosePlaylistDialog
 import com.decodetalkers.personalinterestsmanager.ui.customview.RatingDialogue
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
@@ -47,8 +47,8 @@ class MovieDetailActivity : YouTubeBaseActivity(), ActivityInterface {
     private val localizationDelegate = LocalizationActivityDelegate(this)
     private lateinit var mMovie: MovieModel
 
-    private val mediaItemRecyclerAdapter = MediaItemRecycler(::loadMovieDetailsForActivity)
-    private var sectionRecyclerAdapter = SectionRecycler(::loadMovieDetailsForActivity)
+    private val mediaItemRecyclerAdapter = MediaItemAdapter(::loadMovieDetailsForActivity)
+    private var sectionRecyclerAdapter = SectionAdapter(::loadMovieDetailsForActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

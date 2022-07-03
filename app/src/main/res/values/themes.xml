@@ -10,7 +10,7 @@
 
 
         <item name="colorSplashScreenBg">@color/colorWhite</item>
-        <item name="colorProgress">#C44</item>
+        <item name="colorProgress">#FF8D00</item>
         <item name="inputTextColor">@color/colorGray</item>
         <item name="hintTextColor">@color/colorAccent</item>
         <item name="loginButtonColor">#C70200</item>

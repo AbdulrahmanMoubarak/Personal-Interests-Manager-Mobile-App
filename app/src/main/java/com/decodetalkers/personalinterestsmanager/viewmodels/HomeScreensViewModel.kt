@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.*
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
-import com.decodetalkers.personalinterestsmanager.roomdb.PimBackupDatabase
-import com.decodetalkers.personalinterestsmanager.globalutils.StringHasherSHA256
+
+import com.decodetalkers.personalinterestsmanager.globalutils.StringHasher
 import com.decodetalkers.radioalarm.application.MainApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,32 +17,28 @@ import java.lang.Exception
 class HomeScreensViewModel : ViewModel() {
 
     companion object {
-        const val MOVIES = "movies"
-        const val BOOKS = "books"
-        const val MUSIC = "music"
-
         var isMoviesLoaded = false
         var isMusicLoaded = false
         var isBooksLoaded = false
 
         private var moviesSections: MutableList<SectionModel> = mutableListOf()
-        fun clearMoviesSections(){
+
+        fun clearMoviesSections() {
             moviesSections.clear()
         }
+
         private lateinit var musicSections: List<SectionModel>
         private lateinit var booksSections: List<SectionModel>
     }
 
-    private val databaseInstance = PimBackupDatabase.getInstance(MainApplication.getAppContext())
-
     fun registerUser(email: String, name: String, password: String) = flow {
-        val hasedPass = StringHasherSHA256().hashItem(password)
+        val hasedPass = StringHasher().hashItem(password)
         val response = RetrofitBuilder.pimApiService.registerUser(name, email, hasedPass)
         emit(response.code())
     }
 
     fun login(email: String, password: String) = flow {
-        val hasedPass = StringHasherSHA256().hashItem(password)
+        val hasedPass = StringHasher().hashItem(password)
         val response = RetrofitBuilder.pimApiService.login(email, hasedPass)
         if (response.code() == 200) {
             emit(response.body() as UserModel)
@@ -90,7 +86,7 @@ class HomeScreensViewModel : ViewModel() {
         emit(response)
     }
 
-    fun getAllPlaylistsOfType(userId: Int, type: String) = flow{
+    fun getAllPlaylistsOfType(userId: Int, type: String) = flow {
         val response = RetrofitBuilder.pimApiService.getAllPlayListsOfType(userId, type)
             .body() as List<MediaItemOfListModel>
         emit(response)
@@ -113,8 +109,8 @@ class HomeScreensViewModel : ViewModel() {
         }
     }
 
-    fun getMoviesSearchResults(name: String) = flow {
-        val response = RetrofitBuilder.pimApiService.getMoviesSearchResults(name)
+    fun getMoviesSearchResults(query: String) = flow {
+        val response = RetrofitBuilder.pimApiService.getMoviesSearchResults(query)
             .body() as List<MediaItemOfListModel>
         emit(response)
     }
@@ -168,20 +164,6 @@ class HomeScreensViewModel : ViewModel() {
                 })
             }
             i++
-        }
-    }
-
-    private fun getSectionItems(secList: List<Map<String, String>>) = flow {
-        try {
-            CoroutineScope(Dispatchers.IO).launch {
-                for (section in secList) {
-                    getMovieSectionItems(section).collect {
-                        emit(it)
-                    }
-                }
-            }
-        } catch (e: Exception) {
-
         }
     }
 
@@ -292,22 +274,21 @@ class HomeScreensViewModel : ViewModel() {
         emit(response)
     }
 
-    fun getSectionsForMediaType(mediaType: String) = flow {
-        emit(databaseInstance?.getSpecificTypeSections(mediaType))
+    private fun getMovieBasedRecommendation(movieId: Int, userId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.getMovieBasedRecommendation(movieId, userId)
+            .body() as List<SectionModel>
+        emit(response)
     }
 
-    fun insertSections(sections: List<SectionModel>, mediaType: String) = flow {
-        databaseInstance?.insertTypeSections(sections, mediaType)
-        emit(true)
+    private fun getSongRecommendation(songId: String) = flow {
+        val response = RetrofitBuilder.pimApiService.getSongBasedRecommendation(songId)
+            .body() as List<SectionModel>
+        emit(response)
     }
 
-    fun deleteDatabaseRecords(type: String) = flow {
-        try {
-            databaseInstance?.deleteAllData(type)
-            emit(true)
-        } catch (e: Exception) {
-            emit(false)
-        }
+    private fun updateUserSongListening(songId: String, userId: Int) = flow {
+        val response = RetrofitBuilder.pimApiService.updateSongListeningTimes(userId, songId)
+        emit(response.code())
     }
 
     fun getTopMusicArtists() = flow {
@@ -319,6 +300,12 @@ class HomeScreensViewModel : ViewModel() {
     fun getMusicGenres() = flow {
         val response = RetrofitBuilder.pimApiService.getMusicGenres()
             .body() as List<GenreModel>
+        emit(response)
+    }
+
+    fun getChatbotReply(msgId: Int, msg: String) = flow{
+        val response = RetrofitBuilder.pimApiService.getChatbotReply(msgId, msg)
+            .body() as ChatMessageModel
         emit(response)
     }
 

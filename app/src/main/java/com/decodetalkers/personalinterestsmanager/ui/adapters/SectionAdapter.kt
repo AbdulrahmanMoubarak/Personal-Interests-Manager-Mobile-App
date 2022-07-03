@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
 
-class SectionRecycler(val onClick:(itemId: String, image: ImageView, type: String) -> Unit) : RecyclerView.Adapter<SectionRecycler.SectionViewModel>() {
+class SectionAdapter(val onClick:(itemId: String, image: ImageView, type: String) -> Unit) : RecyclerView.Adapter<SectionAdapter.SectionViewModel>() {
     private var Item_List = ArrayList<SectionModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewModel {
@@ -26,6 +26,9 @@ class SectionRecycler(val onClick:(itemId: String, image: ImageView, type: Strin
         holder.itemsRecycler.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             this.adapter = holder.itemsRecyclerAdapter
+        }
+        if(Item_List.get(position).section_mediaItems.size == 0){
+            holder.itemView.visibility = View.GONE
         }
     }
 
@@ -51,11 +54,11 @@ class SectionRecycler(val onClick:(itemId: String, image: ImageView, type: Strin
     inner class SectionViewModel : RecyclerView.ViewHolder {
         val sectionName: TextView
         val itemsRecycler: RecyclerView
-        val itemsRecyclerAdapter: MediaItemRecycler
+        val itemsRecyclerAdapter: MediaItemAdapter
         constructor(itemView: View) : super(itemView) {
             sectionName = itemView.findViewById(R.id.txt_section_name)
             itemsRecycler = itemView.findViewById(R.id.section_items_recycler)
-            itemsRecyclerAdapter = MediaItemRecycler(onClick)
+            itemsRecyclerAdapter = MediaItemAdapter(onClick)
         }
     }
 }

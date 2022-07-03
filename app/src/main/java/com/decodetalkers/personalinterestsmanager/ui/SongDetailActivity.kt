@@ -21,8 +21,8 @@ import com.decodetalkers.personalinterestsmanager.models.MediaItemOfListModel
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
 import com.decodetalkers.personalinterestsmanager.models.SongModel
 import com.decodetalkers.personalinterestsmanager.retrofit.RetrofitBuilder
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.TYPE_ARTIST
-import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemAdapter.Companion.TYPE_ARTIST
+import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.ChoosePlaylistDialog
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.google.android.youtube.player.YouTubeBaseActivity
@@ -39,7 +39,7 @@ class SongDetailActivity : YouTubeBaseActivity() , ActivityInterface {
     private val localizationDelegate = LocalizationActivityDelegate(this)
 
     private lateinit var mSong: SongModel
-    private var sectionRecyclerAdapter = SectionRecycler(::loadSongDetailsForActivity)
+    private var sectionRecyclerAdapter = SectionAdapter(::loadSongDetailsForActivity)
     private lateinit var mYoutubePlayer: YouTubePlayer
     private var curYtPos = 0
 

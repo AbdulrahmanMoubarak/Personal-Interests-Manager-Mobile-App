@@ -41,7 +41,7 @@ class PlaylistAdapter(var onClick: (plId: Int, plName:String) -> Unit) :
                 }
         } else {
             if (Item_List.get(position).item_type == "movies") {
-                holder.itemImage.load(MediaItemRecycler.MOVIE_IMAGE_LINK_M + Item_List.get(position).item_image) {
+                holder.itemImage.load(MediaItemAdapter.MOVIE_IMAGE_LINK_M + Item_List.get(position).item_image) {
                     crossfade(true)
                     crossfade(500)
                 }

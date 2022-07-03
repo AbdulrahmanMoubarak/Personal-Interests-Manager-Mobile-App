@@ -2,7 +2,7 @@ package com.decodetalkers.personalinterestsmanager.globalutils
 
 import java.security.MessageDigest
 
-class StringHasherSHA256 {
+class StringHasher {
     fun hashItem(item: String): String {
         return try {
             val digest: MessageDigest = MessageDigest.getInstance("SHA-256")

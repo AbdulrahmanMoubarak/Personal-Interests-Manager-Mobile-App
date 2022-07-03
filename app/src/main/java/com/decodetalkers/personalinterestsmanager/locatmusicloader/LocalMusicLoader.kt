@@ -1,9 +1,6 @@
 package com.decodetalkers.personalinterestsmanager.locatmusicloader
 
-import com.decodetalkers.myapplication.locatmusicloader.util.Constants.EXTERNAL_STORAGE_ROOT_PATH
-import com.decodetalkers.myapplication.locatmusicloader.util.Constants.INTERNAL_STORAGE_ROOT_PATH
 import com.decodetalkers.myapplication.locatmusicloader.util.Constants.SOUND_MEDIATYPE_LIST
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
 

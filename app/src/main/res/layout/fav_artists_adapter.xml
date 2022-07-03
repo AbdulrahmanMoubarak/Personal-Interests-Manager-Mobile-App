@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/artistImage"
+        android:minWidth="50dp"
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:layout_margin="4dp"

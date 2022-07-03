@@ -13,16 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.models.SectionModel
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler.Companion.TYPE_ARTIST
-import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionRecycler
+import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemAdapter.Companion.TYPE_ARTIST
+import com.decodetalkers.personalinterestsmanager.ui.adapters.SectionAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
-import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.android.synthetic.main.fragment_music.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -30,7 +28,7 @@ import kotlinx.coroutines.withContext
 class MusicFragment : Fragment() {
 
     //private var sectionRecyclerAdapter = SectionRecycler(::loadSongDetailsForActivity)
-    private var sectionRecyclerAdapter = SectionRecycler(::loadSongDetailsForActivity)
+    private var sectionRecyclerAdapter = SectionAdapter(::loadSongDetailsForActivity)
     private lateinit var homeScreensVM: HomeScreensViewModel
 
     override fun onCreateView(

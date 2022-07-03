@@ -14,12 +14,11 @@ import com.decodetalkers.personalinterestsmanager.R
 import com.decodetalkers.personalinterestsmanager.application.AppUser
 import com.decodetalkers.personalinterestsmanager.globalutils.SharedPreferencesManager
 import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemArrayAdapter
-import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemRecycler
+import com.decodetalkers.personalinterestsmanager.ui.adapters.MediaItemAdapter
 import com.decodetalkers.personalinterestsmanager.ui.customview.MediaHeader
 import com.decodetalkers.personalinterestsmanager.ui.util.UiManager
 import com.decodetalkers.personalinterestsmanager.viewmodels.HomeScreensViewModel
 import kotlinx.android.synthetic.main.activity_playlist_content.*
-import kotlinx.android.synthetic.main.fragment_library.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -107,7 +106,7 @@ class PlaylistContentActivity : AppCompatActivity() , ActivityInterface {
     }
 
     private fun loadSongDetailsForActivity(songId: String, type: String = "") {
-        if (type != MediaItemRecycler.TYPE_ARTIST) {
+        if (type != MediaItemAdapter.TYPE_ARTIST) {
             UiManager().setProgressBarState(content_progress, true)
             CoroutineScope(Dispatchers.IO).launch {
                 homeScreensVM.getSongById(songId).collect {

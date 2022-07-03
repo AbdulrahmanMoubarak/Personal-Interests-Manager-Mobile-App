@@ -197,4 +197,10 @@ interface   RetrofitPimApi {
         @Field("userId") userId: Int,
         @Field("songs[]") songs: List<String>
     ): Response<ResponseBody>
+
+    @GET("/chatbot/chat")
+    suspend fun getChatbotReply(
+        @Query("msgId") msgId: Int,
+        @Query("msg") msg: String
+    ):Response<ChatMessageModel>
 }

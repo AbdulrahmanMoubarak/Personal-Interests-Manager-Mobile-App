@@ -1,8 +1,6 @@
 package com.decodetalkers.personalinterestsmanager.ui.adapters
 
 import android.content.Context
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +43,7 @@ class MediaItemArrayAdapter(
 
         itemName.text = mediaItem.item_name
 
-        if (mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_CAST_MEMBER) {
+        if (mediaItem.item_type.lowercase() == MediaItemAdapter.TYPE_CAST_MEMBER) {
             itemRole.visibility = View.VISIBLE
             itemRole.text = mediaItem.item_id
 
@@ -56,17 +54,17 @@ class MediaItemArrayAdapter(
             itemNameCard.layoutParams.height = 200
         }
 
-        if (mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_MOVIE || mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_CAST_MEMBER) {
-            itemImage.load(MediaItemRecycler.MOVIE_IMAGE_LINK_M + mediaItem.item_image) {
+        if (mediaItem.item_type.lowercase() == MediaItemAdapter.TYPE_MOVIE || mediaItem.item_type.lowercase() == MediaItemAdapter.TYPE_CAST_MEMBER) {
+            itemImage.load(MediaItemAdapter.MOVIE_IMAGE_LINK_M + mediaItem.item_image) {
                 crossfade(true)
                 crossfade(500)
             }
-            if(mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_MOVIE){
+            if(mediaItem.item_type.lowercase() == MediaItemAdapter.TYPE_MOVIE){
                 itemNameCard.visibility = View.GONE
             }
         } else {
 
-            if (mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_ALBUM) {
+            if (mediaItem.item_type.lowercase() == MediaItemAdapter.TYPE_ALBUM) {
                 itemCard.radius = 0f
             }
 
@@ -74,7 +72,7 @@ class MediaItemArrayAdapter(
             itemImage.layoutParams.width = 350
             itemNameCard.layoutParams.width = 350
 
-            if (mediaItem.item_type.lowercase() == MediaItemRecycler.TYPE_ARTIST) {
+            if (mediaItem.item_type.lowercase() == MediaItemAdapter.TYPE_ARTIST) {
                 MainApplication.getAppContext().let {
                     Glide.with(it)
                         .load(mediaItem.item_image)
